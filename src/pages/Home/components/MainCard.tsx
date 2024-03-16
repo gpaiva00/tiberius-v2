@@ -52,7 +52,7 @@ function MainCard() {
                   className="mt-[5.4px] transition-all disabled:border-zinc-400"
                   checked={completed}
                   disabled={!text.length}
-                  onCheckedChange={() => (isClearingItem ? null : handleItemCompletedChange(id))}
+                  onCheckedChange={() => (isClearingItem ? null : handleItemCompletedChange(index))}
                 />
               </div>
 

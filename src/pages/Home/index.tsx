@@ -30,12 +30,12 @@ function Home() {
           >
             Sobre
           </a>
-          {/* <a
+          <a
             href="#"
             className="text-xs text-zinc-400 hover:underline md:text-sm"
           >
-            Política de Privacidade
-          </a> */}
+            Feedback
+          </a>
         </div>
       </footer>
     </div>

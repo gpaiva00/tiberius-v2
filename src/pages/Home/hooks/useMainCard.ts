@@ -11,7 +11,6 @@ const emptyItems = Array.from({ length: 5 }, (_, index) => ({
   text: '',
   completed: false,
   placeholder: getRandomString(placeholders),
-  position: index + 1,
 }))
 
 const listAtom = atomWithStorage<ListItem[]>('@tiberius/items', emptyItems)
@@ -21,7 +20,6 @@ interface ListItem {
   text: string
   completed: boolean
   placeholder: string
-  position: number
 }
 
 function useMainCard() {
@@ -45,17 +43,17 @@ function useMainCard() {
     setItems(newItems)
   }
 
-  function handleItemCompletedChange(id: ListItem['id']) {
+  function handleItemCompletedChange(index: number) {
     const newItems = [...items]
 
-    newItems[id].completed = !newItems[id].completed
+    newItems[index].completed = !newItems[index].completed
 
     setItems(newItems)
 
-    clearItem(id)
+    clearItem(index)
   }
 
-  function clearItem(id: ListItem['id']) {
+  function clearItem(index: number) {
     if (isClearingItem) return
 
     setIsClearingItem(true)
@@ -63,8 +61,8 @@ function useMainCard() {
     setTimeout(() => {
       const newItems = [...items]
 
-      newItems[id] = {
-        id,
+      newItems[index] = {
+        ...newItems[index],
         text: '',
         completed: false,
         placeholder: getRandomString(placeholders),
