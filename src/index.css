@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: Roboto;
+  }
+
+  textarea::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer components {
+  .bounded-notebook {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 10px; /* Largura dos furos */
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 50%, #ddd 50%);
+      background-size: 100% 20px; /* Espaçamento entre os furos */
+    }
+  }
+
+  .drag-over {
+    @apply bg-zinc-200;
+  }
+}
