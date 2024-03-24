@@ -1,12 +1,11 @@
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { KeyboardEvent, useState } from 'react'
+import { useState } from 'react'
 
 import { useToast } from '@/shared/components/ui/use-toast'
 import { getRandomString } from '@/shared/utils/getRandomString'
 
-import { emojis, quotes, titles } from '@/shared/constants/congratulations'
-import { placeholders } from '@/shared/constants/itemsPlaceholder'
+import { emojis, placeholders, quotes, titles } from '@/shared/constants'
 
 const emptyItems = Array.from({ length: 5 }, (_, index) => ({
   id: index,
@@ -15,7 +14,10 @@ const emptyItems = Array.from({ length: 5 }, (_, index) => ({
   placeholder: getRandomString(placeholders),
 }))
 
+const defaultListName = 'Tarefas'
+
 const listAtom = atomWithStorage<ListItem[]>('@tiberius/items', emptyItems)
+const listNameAtom = atomWithStorage<string>('@tiberius/listName', defaultListName)
 
 interface ListItem {
   id: number
@@ -25,23 +27,20 @@ interface ListItem {
 }
 
 function useMainCard() {
+  const [items, setItems] = useAtom(listAtom)
+  const [listName, setListName] = useAtom(listNameAtom)
+
   const [showItemNumber] = useState(false)
   const [isClearingItem, setIsClearingItem] = useState(false)
+  const [isEditingListName, setIsEditingListName] = useState(false)
+  const [listNameInputText, setListNameInputText] = useState(listName)
 
-  const [items, setItems] = useAtom(listAtom)
   const { toast } = useToast()
 
-  function handleItemTextChange({
-    text,
-    index,
-  }: {
-    text: string
-    index: number
-    event?: KeyboardEvent<HTMLDivElement>
-  }) {
+  function handleItemTextChange({ event, index }: { index: number; event: React.ChangeEvent<HTMLTextAreaElement> }) {
     const newItems = [...items]
 
-    newItems[index].text = text
+    newItems[index].text = event.target.value
 
     setItems(newItems)
   }
@@ -107,11 +106,44 @@ function useMainCard() {
     setItems(newItems)
   }
 
+  function handleListNameInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setListNameInputText(event.currentTarget.value)
+  }
+
+  function handleListNameInputKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') {
+      handleBlurListNameInput()
+      event.preventDefault()
+    }
+  }
+
+  function handleBlurListNameInput() {
+    if (!listNameInputText.length) {
+      setListNameInputText(defaultListName)
+      setListName(defaultListName)
+    } else {
+      setListName(listNameInputText)
+    }
+
+    toggleIsEditingListName()
+  }
+
+  function toggleIsEditingListName() {
+    setIsEditingListName(!isEditingListName)
+  }
+
   return {
     textFormatting: [],
     items,
     isClearingItem,
     showItemNumber,
+    listName,
+    isEditingListName,
+    listNameInputText,
+    toggleIsEditingListName,
+    handleBlurListNameInput,
+    handleListNameInputChange,
+    handleListNameInputKeyDown,
     handleItemTextChange,
     handleCompleteItem,
     handleOnDragItemStart,

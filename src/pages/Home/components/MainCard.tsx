@@ -2,6 +2,7 @@ import classnames from 'classnames'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card'
 import { Checkbox } from '@/shared/components/ui/checkbox'
+import { Input } from '@/shared/components/ui/input'
 
 import { useMainCard } from '@/pages/Home/hooks'
 
@@ -12,6 +13,13 @@ function MainCard() {
   const {
     items,
     isClearingItem,
+    isEditingListName,
+    listName,
+    listNameInputText,
+    toggleIsEditingListName,
+    handleBlurListNameInput,
+    handleListNameInputChange,
+    handleListNameInputKeyDown,
     handleItemTextChange,
     handleCompleteItem,
     handleOnDragItemStart,
@@ -23,16 +31,31 @@ function MainCard() {
   return (
     <div className="w-full md:w-auto">
       <CardHeader className="w-full flex-row items-center justify-between md:w-[600px]">
-        <CardTitle className="text-2xl md:text-3xl">Tarefas</CardTitle>
-
-        {/* <div className="flex items-center gap-4">
-        </div> */}
+        {isEditingListName ? (
+          <Input
+            autoFocus
+            value={listNameInputText}
+            onChange={handleListNameInputChange}
+            onKeyDown={handleListNameInputKeyDown}
+            onBlur={handleBlurListNameInput}
+            onSubmit={handleBlurListNameInput}
+            maxLength={20}
+          />
+        ) : (
+          <CardTitle
+            className="text-2xl hover:cursor-pointer hover:underline md:text-3xl"
+            onClick={toggleIsEditingListName}
+          >
+            {listName}
+          </CardTitle>
+        )}
       </CardHeader>
 
       <Card className="w-full rounded-md border border-zinc-200 shadow-lg md:w-[600px]">
         <CardContent className="p-0">
           {items.map(({ id, text, completed, placeholder }, index) => (
             <div
+              key={index}
               className="flex h-24 space-x-4 border-b px-2 py-2 last:border-b-0"
               draggable={!!text.length}
               onDragStart={(event) => handleOnDragItemStart(event, index)}
@@ -65,7 +88,7 @@ function MainCard() {
                   }
                 )}
                 value={text}
-                onChange={(e) => handleItemTextChange({ text: e.target.value, index })}
+                onChange={(event) => handleItemTextChange({ event, index })}
                 placeholder={placeholder}
                 maxLength={250}
               />
