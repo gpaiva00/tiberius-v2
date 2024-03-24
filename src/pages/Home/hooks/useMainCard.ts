@@ -2,8 +2,10 @@ import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { KeyboardEvent, useState } from 'react'
 
+import { useToast } from '@/shared/components/ui/use-toast'
 import { getRandomString } from '@/shared/utils/getRandomString'
 
+import { emojis, quotes, titles } from '@/shared/constants/congratulations'
 import { placeholders } from '@/shared/constants/itemsPlaceholder'
 
 const emptyItems = Array.from({ length: 5 }, (_, index) => ({
@@ -27,6 +29,7 @@ function useMainCard() {
   const [isClearingItem, setIsClearingItem] = useState(false)
 
   const [items, setItems] = useAtom(listAtom)
+  const { toast } = useToast()
 
   function handleItemTextChange({
     text,
@@ -43,12 +46,17 @@ function useMainCard() {
     setItems(newItems)
   }
 
-  function handleItemCompletedChange(index: number) {
+  function handleCompleteItem(index: number) {
     const newItems = [...items]
 
     newItems[index].completed = !newItems[index].completed
 
     setItems(newItems)
+
+    toast({
+      title: `${getRandomString(titles)} ${getRandomString(emojis)}`,
+      description: `${getRandomString(quotes)}`,
+    })
 
     clearItem(index)
   }
@@ -105,7 +113,7 @@ function useMainCard() {
     isClearingItem,
     showItemNumber,
     handleItemTextChange,
-    handleItemCompletedChange,
+    handleCompleteItem,
     handleOnDragItemStart,
     handleOnDragItemOver,
     handleDragItemLeave,

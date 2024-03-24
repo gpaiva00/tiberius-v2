@@ -1,3 +1,4 @@
+import { Toaster } from '@/shared/components/ui/toaster'
 import { Provider, createStore } from 'jotai'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -14,6 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={tiberiusStore}>
       <TooltipProvider>
         <Home />
+        <Toaster />
       </TooltipProvider>
     </Provider>
   </React.StrictMode>

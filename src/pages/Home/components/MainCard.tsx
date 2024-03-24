@@ -13,7 +13,7 @@ function MainCard() {
     items,
     isClearingItem,
     handleItemTextChange,
-    handleItemCompletedChange,
+    handleCompleteItem,
     handleOnDragItemStart,
     handleOnDragItemOver,
     handleOnDropItem,
@@ -52,7 +52,7 @@ function MainCard() {
                   className="mt-[5.4px] transition-all disabled:border-zinc-400"
                   checked={completed}
                   disabled={!text.length}
-                  onCheckedChange={() => (isClearingItem ? null : handleItemCompletedChange(index))}
+                  onCheckedChange={() => (isClearingItem ? null : handleCompleteItem(index))}
                 />
               </div>
 
