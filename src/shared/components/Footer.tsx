@@ -14,7 +14,7 @@ function Footer() {
           Tiberius
         </a>
         {/* <p className="text-xs text-zinc-400 md:text-sm">{new Date().getFullYear()}</p> */}
-        <p className="hidden text-xs text-zinc-400 md:visible md:text-sm">Concentre-se no presente</p>
+        <p className="hidden text-xs text-zinc-400 md:block md:text-sm">Concentre-se no presente</p>
       </div>
       <div className="flex items-center gap-6 md:gap-10">
         <a
