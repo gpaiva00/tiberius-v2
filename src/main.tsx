@@ -1,3 +1,4 @@
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Provider, createStore } from 'jotai'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -12,6 +13,7 @@ const tiberiusStore = createStore()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <SpeedInsights />
     <Provider store={tiberiusStore}>
       <TooltipProvider>
         <Routes />
