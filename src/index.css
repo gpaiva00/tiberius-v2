@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+  }
+
   body {
     font-family: Roboto;
   }

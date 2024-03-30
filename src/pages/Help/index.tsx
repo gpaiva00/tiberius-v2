@@ -1,15 +1,35 @@
 function Help() {
   return (
-    <div className="flex w-full flex-col gap-4 md:max-w-[600px]">
+    <div className="flex w-full flex-1 flex-col gap-4 md:max-w-[600px]">
       <h3 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl">Ajuda</h3>
       <p className="-mt-2 text-zinc-500">Saiba como tirar o máximo de proveito do Tiberius</p>
 
       <div className="flex flex-col gap-2">
-        <h3 className="text-base font-semibold leading-none tracking-tight md:text-xl">Como funciona?</h3>
+        <h3 className="text-base font-semibold uppercase leading-none tracking-tight md:text-xl">Como funciona?</h3>
         <ul className="list-inside list-disc space-y-4 md:text-lg">
           <li>
-            Você pode escrever suas tarefas nos 5 campos de textos disponíveis. Cada vez que você conclui uma tarefa,
-            este campo é limpo e então disponível para incluir uma nova tarefa.
+            <b>Limite de tarefas:</b> você pode criar até 5 tarefas no Tiberius. Por que? Dessa forma, evitamos a
+            sobrecarga cognitiva, tornando o processo de gerenciamento de tarefas mais controlável e eficiente. Isso
+            ajuda na produtividade, pois somos incentivados a concentrar nossos esforços em um conjunto limitado de
+            atividades, em vez de desperdiçá-los no{' '}
+            <a
+              href="https://www.phind.com/search?cache=ngqsl8aja4rj1c6bhv5kwr06"
+              className="italic underline"
+            >
+              multitasking
+            </a>
+            .
+          </li>
+          <li>
+            <b>Limite de caracteres:</b> seguindo o{' '}
+            <a
+              href="https://www.phind.com/search?cache=hvqat33z89kdr17ov89pm4cy"
+              className="underline"
+            >
+              princípio da concisão
+            </a>
+            , limitamos as tarefas em 250 caracteres. Essa técnica incentiva a clareza e objetividade na expressão das
+            ideias, tornando as tarefas mais claras e diretas.
           </li>
           <li>
             Suas tarefas são armazenadas localmente em seu navegador. Então se você fechar a aba do Tiberius, não
