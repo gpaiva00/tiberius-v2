@@ -16,6 +16,7 @@ function MainCard() {
     isEditingListName,
     listName,
     listNameInputText,
+    canDragItem,
     toggleIsEditingListName,
     handleBlurListNameInput,
     handleListNameInputChange,
@@ -26,6 +27,7 @@ function MainCard() {
     handleOnDragItemOver,
     handleOnDropItem,
     handleDragItemLeave,
+    toggleCanDragItem,
   } = useMainCard()
 
   return (
@@ -57,7 +59,7 @@ function MainCard() {
             <div
               key={index}
               className="flex h-24 space-x-4 border-b px-2 py-2 last:border-b-0"
-              draggable={!!text.length}
+              draggable={!!text.length && canDragItem}
               onDragStart={(event) => handleOnDragItemStart(event, index)}
               onDragOver={(event) => handleOnDragItemOver(event)}
               onDrop={(event) => handleOnDropItem(event, index)}
@@ -66,6 +68,8 @@ function MainCard() {
               <div className="flex items-start gap-2">
                 <button
                   disabled={!text.length}
+                  onMouseEnter={toggleCanDragItem}
+                  onMouseLeave={toggleCanDragItem}
                   className="mt-[5.4px] cursor-move text-zinc-300 transition-all hover:text-zinc-400 disabled:cursor-not-allowed disabled:text-zinc-200"
                 >
                   <GripVertical size={16} />

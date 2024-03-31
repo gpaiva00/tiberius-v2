@@ -34,6 +34,7 @@ function useMainCard() {
   const [isClearingItem, setIsClearingItem] = useState(false)
   const [isEditingListName, setIsEditingListName] = useState(false)
   const [listNameInputText, setListNameInputText] = useState(listName)
+  const [canDragItem, setCanDragItem] = useState(false)
 
   const { toast } = useToast()
 
@@ -128,6 +129,10 @@ function useMainCard() {
     toggleIsEditingListName()
   }
 
+  function toggleCanDragItem() {
+    setCanDragItem(!canDragItem)
+  }
+
   function toggleIsEditingListName() {
     setIsEditingListName(!isEditingListName)
   }
@@ -138,9 +143,11 @@ function useMainCard() {
     isClearingItem,
     showItemNumber,
     listName,
+    canDragItem,
     isEditingListName,
     listNameInputText,
     toggleIsEditingListName,
+    toggleCanDragItem,
     handleBlurListNameInput,
     handleListNameInputChange,
     handleListNameInputKeyDown,
