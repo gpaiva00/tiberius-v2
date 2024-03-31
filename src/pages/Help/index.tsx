@@ -32,6 +32,10 @@ function Help() {
             ideias, tornando as tarefas mais claras e diretas.
           </li>
           <li>
+            <b>Posso renomear a lista padrão?</b> Sim, basta clicar no nome da lista padrão ("Tarefas") e digitar um
+            nome que melhor se encaixe nos seus objetivos.
+          </li>
+          <li>
             Suas tarefas são armazenadas localmente em seu navegador. Então se você fechar a aba do Tiberius, não
             perderá suas tarefas.
           </li>
