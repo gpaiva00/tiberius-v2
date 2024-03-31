@@ -33,7 +33,7 @@ function Footer() {
           Sobre
         </Link>
         <a
-          href="https://gabworkspace.notion.site/Release-Notes-6e2a338ee0ee426490654cded0706c92?pvs=4"
+          href="https://paivacodes.notion.site/Release-Notes-6e2a338ee0ee426490654cded0706c92?pvs=4"
           className="text-xs text-zinc-400 hover:underline md:text-sm"
         >
           Novidades
