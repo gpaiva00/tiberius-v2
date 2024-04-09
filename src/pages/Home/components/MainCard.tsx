@@ -86,7 +86,7 @@ function MainCard() {
               <Textarea
                 key={id}
                 className={classnames(
-                  'm-0 h-full resize-none rounded-none border-none p-0 text-base outline-none ring-0 ring-offset-0 transition-all placeholder:text-zinc-400/70 dark:bg-zinc-800 dark:text-zinc-300 dark:placeholder:text-zinc-500',
+                  'm-0 h-full resize-none rounded-none border-none p-0 text-base outline-none ring-0 ring-offset-0 transition-all placeholder:text-zinc-400/70 dark:bg-zinc-800 dark:text-zinc-300 dark:placeholder:text-zinc-600',
                   {
                     'text-zinc-200 line-through dark:text-zinc-500': completed,
                   }
