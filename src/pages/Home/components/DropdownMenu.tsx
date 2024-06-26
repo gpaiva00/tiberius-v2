@@ -15,10 +15,10 @@ import { Label } from '@/shared/components/ui/label'
 import { Switch } from '@/shared/components/ui/switch'
 import { useDropdownMenu } from '../hooks'
 
-import { ArrowUpDown, EyeOff, Info, Menu, Monitor, Moon, Sun } from 'lucide-react'
+import { ArrowUpDown, EyeOff, Info, Menu, Monitor, Moon, Share, Sun } from 'lucide-react'
 
 function DropdownMenu() {
-  const { configs, setConfigs, handleChangeApperance } = useDropdownMenu()
+  const { configs, setConfigs, handleChangeApperance, handleShareTiberius } = useDropdownMenu()
 
   return (
     <OriginalDropdownMenu>
@@ -37,7 +37,7 @@ function DropdownMenu() {
           <DropdownMenuItem className="justify-between">
             <Label
               htmlFor="reorder"
-              className="flex items-center gap-1 capitalize"
+              className="flex items-center gap-1 font-normal capitalize"
             >
               <ArrowUpDown className="mr-2 h-4 w-4" />
               Auto reorganizar
@@ -64,7 +64,7 @@ function DropdownMenu() {
           <DropdownMenuItem className="justify-between">
             <Label
               htmlFor="hide-suggestions"
-              className="flex items-center gap-1 capitalize"
+              className="flex items-center gap-1 font-normal capitalize"
             >
               <EyeOff className="mr-2 h-4 w-4" />
               Ocultar sugestões
@@ -101,6 +101,11 @@ function DropdownMenu() {
             Automático
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleShareTiberius}>
+          <Share className="mr-2 h-4 w-4" />
+          Compartilhar o Tiberius
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </OriginalDropdownMenu>
   )

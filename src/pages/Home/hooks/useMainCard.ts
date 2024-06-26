@@ -6,6 +6,7 @@ import { getRandomString } from '@/shared/utils/getRandomString'
 
 import { emojis, placeholders, quotes, titles } from '@/shared/constants'
 import { configsAtom, defaultListName, listAtom, tasksAtom } from '@/shared/stores'
+import { ListItem } from '@/shared/types'
 
 function useMainCard() {
   const [items, setItems] = useAtom(tasksAtom)
@@ -43,13 +44,26 @@ function useMainCard() {
     clearItem(index)
   }
 
+  function reorderItems(items: ListItem[]) {
+    const newItems = [...items]
+
+    newItems.sort((a, b) => {
+      if (!a.text && b.text) return 1
+      if (a.text && !b.text) return -1
+
+      return 0
+    })
+
+    return newItems
+  }
+
   function clearItem(index: number) {
     if (isClearingItem) return
 
     setIsClearingItem(true)
 
     setTimeout(() => {
-      const newItems = [...items]
+      let newItems = [...items]
 
       newItems[index] = {
         ...newItems[index],
@@ -58,9 +72,14 @@ function useMainCard() {
         placeholder: getRandomString(placeholders),
       }
 
+      if (configs.autoReorder) {
+        newItems = reorderItems(newItems)
+      }
+
       setItems(newItems)
+
       setIsClearingItem(false)
-    }, 1500)
+    }, 1000)
   }
 
   function handleOnDragItemStart(event: React.DragEvent<HTMLDivElement>, index: number) {
