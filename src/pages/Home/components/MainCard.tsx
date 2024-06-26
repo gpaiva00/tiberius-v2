@@ -1,3 +1,5 @@
+'use client'
+
 import classnames from 'classnames'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card'
@@ -8,6 +10,7 @@ import { useMainCard } from '@/pages/Home/hooks'
 
 import { Textarea } from '@/shared/components/ui/textarea'
 import { GripVertical } from 'lucide-react'
+import { DropdownMenu } from './DropdownMenu'
 
 function MainCard() {
   const {
@@ -44,16 +47,20 @@ function MainCard() {
             maxLength={20}
           />
         ) : (
-          <CardTitle
-            className="text-2xl hover:cursor-pointer hover:underline dark:text-zinc-300 md:text-3xl"
-            onClick={toggleIsEditingListName}
-          >
-            {listName}
-          </CardTitle>
+          <div className="flex w-full items-center justify-between">
+            <CardTitle
+              className="text-2xl hover:cursor-pointer hover:underline md:text-3xl dark:text-zinc-300"
+              onClick={toggleIsEditingListName}
+            >
+              {listName}
+            </CardTitle>
+
+            <DropdownMenu />
+          </div>
         )}
       </CardHeader>
 
-      <Card className="w-full rounded-md border border-zinc-200 shadow-lg dark:border-zinc-700 dark:bg-zinc-800 md:w-[600px]">
+      <Card className="w-full rounded-md border border-zinc-200 shadow-lg md:w-[600px] dark:border-zinc-700 dark:bg-zinc-800">
         <CardContent className="p-0">
           {items.map(({ id, text, completed, placeholder }, index) => (
             <div
