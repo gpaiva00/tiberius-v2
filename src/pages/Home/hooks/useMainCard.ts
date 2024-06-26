@@ -1,34 +1,16 @@
-import { useAtom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
+import { useAtom, useAtomValue } from 'jotai'
 import { useState } from 'react'
 
 import { useToast } from '@/shared/components/ui/use-toast'
 import { getRandomString } from '@/shared/utils/getRandomString'
 
 import { emojis, placeholders, quotes, titles } from '@/shared/constants'
-
-const emptyItems = Array.from({ length: 5 }, (_, index) => ({
-  id: index,
-  text: '',
-  completed: false,
-  placeholder: getRandomString(placeholders),
-}))
-
-const defaultListName = 'Tarefas'
-
-const listAtom = atomWithStorage<ListItem[]>('@tiberius/items', emptyItems)
-const listNameAtom = atomWithStorage<string>('@tiberius/listName', defaultListName)
-
-interface ListItem {
-  id: number
-  text: string
-  completed: boolean
-  placeholder: string
-}
+import { configsAtom, defaultListName, listAtom, tasksAtom } from '@/shared/stores'
 
 function useMainCard() {
-  const [items, setItems] = useAtom(listAtom)
-  const [listName, setListName] = useAtom(listNameAtom)
+  const [items, setItems] = useAtom(tasksAtom)
+  const [listName, setListName] = useAtom(listAtom)
+  const configs = useAtomValue(configsAtom)
 
   const [showItemNumber] = useState(false)
   const [isClearingItem, setIsClearingItem] = useState(false)
@@ -143,6 +125,7 @@ function useMainCard() {
     isClearingItem,
     showItemNumber,
     listName,
+    configs,
     canDragItem,
     isEditingListName,
     listNameInputText,

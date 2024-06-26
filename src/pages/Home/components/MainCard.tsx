@@ -20,6 +20,7 @@ function MainCard() {
     listName,
     listNameInputText,
     canDragItem,
+    configs,
     toggleIsEditingListName,
     handleBlurListNameInput,
     handleListNameInputChange,
@@ -100,7 +101,7 @@ function MainCard() {
                 )}
                 value={text}
                 onChange={(event) => handleItemTextChange({ event, index })}
-                placeholder={placeholder}
+                placeholder={configs.hideSuggestions ? '' : placeholder}
                 maxLength={250}
               />
             </div>
