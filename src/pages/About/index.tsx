@@ -1,7 +1,7 @@
 function About() {
   return (
     <div className="flex w-full flex-col gap-4 md:max-w-[600px]">
-      <h3 className="text-2xl font-semibold leading-none tracking-tight dark:text-zinc-400 md:text-3xl">
+      <h3 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl dark:text-zinc-400">
         Sobre o Tiberius
       </h3>
 

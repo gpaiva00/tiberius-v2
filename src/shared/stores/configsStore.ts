@@ -1,4 +1,6 @@
-import { atomWithStorage } from "jotai/utils";
+import { atomWithStorage } from 'jotai/utils'
+
+import { CONFIGS_STORAGE_KEY } from '../constants'
 
 interface ConfigsProps {
   autoReorder: boolean
@@ -9,11 +11,10 @@ interface ConfigsProps {
 const defaultItems: ConfigsProps = {
   apperance: 'auto',
   autoReorder: true,
-  hideSuggestions: false
+  hideSuggestions: false,
 }
 
-const configsAtom = atomWithStorage<ConfigsProps>('@tiberius/configs', defaultItems)
+const configsAtom = atomWithStorage<ConfigsProps>(CONFIGS_STORAGE_KEY, defaultItems)
 
-export { configsAtom };
-export type { ConfigsProps };
-
+export { configsAtom }
+export type { ConfigsProps }

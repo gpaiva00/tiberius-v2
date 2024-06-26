@@ -1,5 +1,3 @@
-import { useAtom } from 'jotai'
-
 import { Button } from '@/shared/components/ui/button'
 import {
   DropdownMenuContent,
@@ -15,19 +13,21 @@ import {
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/shared/components/ui/hover-card'
 import { Label } from '@/shared/components/ui/label'
 import { Switch } from '@/shared/components/ui/switch'
-
-import { configsAtom, ConfigsProps } from '@/shared/stores'
+import { useDropdownMenu } from '../hooks'
 
 import { ArrowUpDown, EyeOff, Info, Menu, Monitor, Moon, Sun } from 'lucide-react'
 
 function DropdownMenu() {
-  const [configs, setConfigs] = useAtom(configsAtom)
+  const { configs, setConfigs, handleChangeApperance } = useDropdownMenu()
 
   return (
     <OriginalDropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="secondary">
-          <Menu />
+      <DropdownMenuTrigger>
+        <Button
+          variant="outline"
+          size="icon"
+        >
+          <Menu className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-72">
@@ -43,9 +43,9 @@ function DropdownMenu() {
               Auto reorganizar
               <HoverCard>
                 <HoverCardTrigger>
-                  <Info className="h-4 w-4" />
+                  <Info className="h-3 w-3" />
                 </HoverCardTrigger>
-                <HoverCardContent className="ml-2 normal-case">
+                <HoverCardContent className="ml-2 font-normal normal-case">
                   As tarefas vazias vão para baixo automaticamente, mantendo sua lista sempre organizada.
                 </HoverCardContent>
               </HoverCard>
@@ -82,17 +82,11 @@ function DropdownMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        {/* TODO: change darkMode atom */}
         <DropdownMenuLabel>Aparência</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup
           value={configs.apperance}
-          onValueChange={(value: ConfigsProps['apperance']) =>
-            setConfigs((prev) => ({
-              ...prev,
-              apperance: value,
-            }))
-          }
+          onValueChange={handleChangeApperance}
         >
           <DropdownMenuRadioItem value="dark">
             <Moon className="mr-2 h-4 w-4" />

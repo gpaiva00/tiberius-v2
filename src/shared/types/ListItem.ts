@@ -6,4 +6,3 @@ interface ListItem {
 }
 
 export type { ListItem }
-

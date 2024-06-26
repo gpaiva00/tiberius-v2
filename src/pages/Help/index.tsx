@@ -1,11 +1,11 @@
 function Help() {
   return (
     <div className="flex w-full flex-1 flex-col gap-4 md:max-w-[600px]">
-      <h3 className="text-2xl font-semibold leading-none tracking-tight dark:text-zinc-400 md:text-3xl">Ajuda</h3>
+      <h3 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl dark:text-zinc-400">Ajuda</h3>
       <p className="-mt-2 text-lg text-zinc-500 md:text-base">Saiba como tirar o máximo de proveito do Tiberius</p>
 
       <div className="flex flex-col gap-2">
-        <h3 className="text-lg font-semibold uppercase leading-none tracking-tight dark:text-zinc-400 md:text-xl">
+        <h3 className="text-lg font-semibold uppercase leading-none tracking-tight md:text-xl dark:text-zinc-400">
           Como funciona?
         </h3>
         <ul className="list-inside list-disc space-y-4 text-lg dark:text-zinc-400">
