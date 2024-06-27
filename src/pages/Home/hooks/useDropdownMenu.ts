@@ -1,4 +1,4 @@
-/* eslint-disable no-empty */
+ 
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 

@@ -95,7 +95,6 @@ function useTask() {
   function handleOnDropItem(event: React.DragEvent<HTMLDivElement>, index: number) {
     event.preventDefault()
     event.currentTarget.classList.remove('drag-over')
-
     const dragIndex = Number(event.dataTransfer.getData('text/plain'))
     const newTasks = [...tasks]
     const [draggedItem] = newTasks.splice(dragIndex, 1)
@@ -111,6 +110,7 @@ function useTask() {
 
   return {
     tasks,
+    reorderItems,
     canDragItem,
     isClearingItem,
     toggleCanDragItem,
