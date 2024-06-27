@@ -1,4 +1,3 @@
- 
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 
@@ -58,8 +57,10 @@ function useDropdownMenu() {
   }
 
   return {
+    toast,
     configs,
     setConfigs,
+    applyApperance,
     handleChangeApperance,
     handleShareTiberius,
   }

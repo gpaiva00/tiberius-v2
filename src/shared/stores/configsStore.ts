@@ -1,6 +1,6 @@
 import { atomWithStorage } from 'jotai/utils'
 
-import { CONFIGS_STORAGE_KEY } from '../constants'
+import { CONFIGS_STORAGE_KEY } from '@/shared/constants'
 
 interface ConfigsProps {
   autoReorder: boolean
