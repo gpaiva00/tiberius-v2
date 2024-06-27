@@ -1,115 +1,18 @@
 import { useAtom, useAtomValue } from 'jotai'
 import { useState } from 'react'
 
-import { useToast } from '@/shared/components/ui/use-toast'
-import { getRandomString } from '@/shared/utils/getRandomString'
-
-import { emojis, placeholders, quotes, titles } from '@/shared/constants'
-import { configsAtom, defaultListName, listAtom, tasksAtom } from '@/shared/stores'
-import { ListItem } from '@/shared/types'
+import { configsAtom, defaultListName, listAtom } from '@/shared/stores'
 
 function useMainCard() {
-  const [items, setItems] = useAtom(tasksAtom)
   const [listName, setListName] = useAtom(listAtom)
   const configs = useAtomValue(configsAtom)
 
   const [showItemNumber] = useState(false)
-  const [isClearingItem, setIsClearingItem] = useState(false)
   const [isEditingListName, setIsEditingListName] = useState(false)
   const [listNameInputText, setListNameInputText] = useState(listName)
-  const [canDragItem, setCanDragItem] = useState(false)
 
-  const { toast } = useToast()
-
-  function handleItemTextChange({ event, index }: { index: number; event: React.ChangeEvent<HTMLTextAreaElement> }) {
-    const newItems = [...items]
-
-    newItems[index].text = event.target.value
-
-    setItems(newItems)
-  }
-
-  function handleCompleteItem(index: number) {
-    const newItems = [...items]
-
-    newItems[index].completed = !newItems[index].completed
-
-    setItems(newItems)
-
-    toast({
-      title: `${getRandomString(titles)} ${getRandomString(emojis)}`,
-      description: `${getRandomString(quotes)}`,
-    })
-
-    clearItem(index)
-  }
-
-  function reorderItems(items: ListItem[]) {
-    const newItems = [...items]
-
-    newItems.sort((a, b) => {
-      if (!a.text && b.text) return 1
-      if (a.text && !b.text) return -1
-
-      return 0
-    })
-
-    return newItems
-  }
-
-  function clearItem(index: number) {
-    if (isClearingItem) return
-
-    setIsClearingItem(true)
-
-    setTimeout(() => {
-      let newItems = [...items]
-
-      newItems[index] = {
-        ...newItems[index],
-        text: '',
-        completed: false,
-        placeholder: getRandomString(placeholders),
-      }
-
-      if (configs.autoReorder) {
-        newItems = reorderItems(newItems)
-      }
-
-      setItems(newItems)
-
-      setIsClearingItem(false)
-    }, 1000)
-  }
-
-  function handleOnDragItemStart(event: React.DragEvent<HTMLDivElement>, index: number) {
-    event.dataTransfer.setData('text/plain', index.toString())
-  }
-
-  function handleOnDragItemOver(event: React.DragEvent<HTMLDivElement>) {
-    event.preventDefault()
-    event.currentTarget.classList.add('drag-over')
-  }
-
-  function handleDragItemLeave(event: React.DragEvent<HTMLDivElement>) {
-    event.currentTarget.classList.remove('drag-over')
-  }
-
-  function handleOnDropItem(event: React.DragEvent<HTMLDivElement>, index: number) {
-    event.preventDefault()
-    event.currentTarget.classList.remove('drag-over')
-
-    const dragIndex = Number(event.dataTransfer.getData('text/plain'))
-    const newItems = [...items]
-    const [draggedItem] = newItems.splice(dragIndex, 1)
-
-    newItems.splice(index, 0, draggedItem)
-
-    setItems(newItems)
-  }
-
-  function handleListNameInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setListNameInputText(event.currentTarget.value)
+  function handleListNameInputChange(value: string) {
+    setListNameInputText(value)
   }
 
   function handleListNameInputKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -130,35 +33,21 @@ function useMainCard() {
     toggleIsEditingListName()
   }
 
-  function toggleCanDragItem() {
-    setCanDragItem(!canDragItem)
-  }
-
   function toggleIsEditingListName() {
     setIsEditingListName(!isEditingListName)
   }
 
   return {
     textFormatting: [],
-    items,
-    isClearingItem,
     showItemNumber,
     listName,
     configs,
-    canDragItem,
     isEditingListName,
     listNameInputText,
     toggleIsEditingListName,
-    toggleCanDragItem,
     handleBlurListNameInput,
     handleListNameInputChange,
     handleListNameInputKeyDown,
-    handleItemTextChange,
-    handleCompleteItem,
-    handleOnDragItemStart,
-    handleOnDragItemOver,
-    handleDragItemLeave,
-    handleOnDropItem,
   }
 }
 

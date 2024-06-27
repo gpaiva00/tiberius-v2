@@ -6,33 +6,37 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui
 import { Checkbox } from '@/shared/components/ui/checkbox'
 import { Input } from '@/shared/components/ui/input'
 
-import { useMainCard } from '@/pages/Home/hooks'
+import { useMainCard, useTask } from '@/pages/Home/hooks'
 
 import { Textarea } from '@/shared/components/ui/textarea'
-import { GripVertical } from 'lucide-react'
 import { DropdownMenu } from './DropdownMenu'
+
+import { GripVertical } from 'lucide-react'
 
 function MainCard() {
   const {
-    items,
-    isClearingItem,
     isEditingListName,
     listName,
     listNameInputText,
-    canDragItem,
     configs,
     toggleIsEditingListName,
     handleBlurListNameInput,
     handleListNameInputChange,
     handleListNameInputKeyDown,
-    handleItemTextChange,
-    handleCompleteItem,
-    handleOnDragItemStart,
-    handleOnDragItemOver,
-    handleOnDropItem,
-    handleDragItemLeave,
-    toggleCanDragItem,
   } = useMainCard()
+
+  const {
+    tasks,
+    canDragItem,
+    handleOnDropItem,
+    handleCompleteItem,
+    handleDragItemLeave,
+    handleItemTextChange,
+    handleOnDragItemOver,
+    handleOnDragItemStart,
+    toggleCanDragItem,
+    isClearingItem,
+  } = useTask()
 
   return (
     <div className="w-full md:w-auto">
@@ -41,7 +45,7 @@ function MainCard() {
           <Input
             autoFocus
             value={listNameInputText}
-            onChange={handleListNameInputChange}
+            onChange={(event) => handleListNameInputChange(event.currentTarget.value)}
             onKeyDown={handleListNameInputKeyDown}
             onBlur={handleBlurListNameInput}
             onSubmit={handleBlurListNameInput}
@@ -63,7 +67,7 @@ function MainCard() {
 
       <Card className="w-full rounded-md border border-zinc-200 shadow-lg md:w-[600px] dark:border-zinc-700 dark:bg-zinc-800">
         <CardContent className="p-0">
-          {items.map(({ id, text, completed, placeholder }, index) => (
+          {tasks.map(({ id, text, completed, placeholder }, index) => (
             <div
               key={index}
               className="flex h-24 space-x-4 border-b px-2 py-2 last:border-b-0 dark:border-b-zinc-700"
