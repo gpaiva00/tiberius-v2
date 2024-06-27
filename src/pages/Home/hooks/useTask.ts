@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useToast } from '@/shared/components/ui/use-toast'
 import { getRandomString } from '@/shared/utils/getRandomString'
 
-import { emojis, placeholders, quotes, titles } from '@/shared/constants'
+import { emojis, LIMIT_CARACTERS, placeholders, quotes, titles } from '@/shared/constants'
 import { configsAtom, tasksAtom } from '@/shared/stores'
 
 import { ListItem } from '@/shared/types'
@@ -21,7 +21,7 @@ function useTask() {
   function handleItemTextChange({ event, index }: { index: number; event: React.ChangeEvent<HTMLTextAreaElement> }) {
     const newTasks = [...tasks]
 
-    newTasks[index].text = event.target.value
+    newTasks[index].text = event.target.value.slice(0, LIMIT_CARACTERS)
 
     setTasks(newTasks)
   }

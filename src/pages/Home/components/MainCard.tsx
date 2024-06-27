@@ -9,6 +9,7 @@ import { Input } from '@/shared/components/ui/input'
 import { useMainCard, useTask } from '@/pages/Home/hooks'
 
 import { Textarea } from '@/shared/components/ui/textarea'
+import { LIMIT_CARACTERS } from '@/shared/constants'
 import { DropdownMenu } from './DropdownMenu'
 
 import { GripVertical } from 'lucide-react'
@@ -105,8 +106,8 @@ function MainCard() {
                 )}
                 value={text}
                 onChange={(event) => handleItemTextChange({ event, index })}
-                placeholder={configs.hideSuggestions ? '' : placeholder}
-                maxLength={250}
+                placeholder={configs?.hideSuggestions ? '' : placeholder}
+                maxLength={LIMIT_CARACTERS}
               />
             </div>
           ))}

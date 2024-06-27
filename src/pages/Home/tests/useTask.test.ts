@@ -1,6 +1,7 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import { LIMIT_CARACTERS } from '@/shared/constants'
 import { useTask } from '../hooks/useTask'
 
 vi.mock('@/shared/components/ui/use-toast', () => ({
@@ -28,6 +29,17 @@ describe('useTask', () => {
     })
 
     expect(result.current.tasks[0].text).toBe('New task text')
+  })
+
+  it(`should handle item text change with more than ${LIMIT_CARACTERS} caracters`, () => {
+    const { result } = renderHook(useTask)
+    const event = { target: { value: 'New task text'.repeat(LIMIT_CARACTERS + 10) } } as unknown as React.ChangeEvent<HTMLTextAreaElement>
+
+    act(() => {
+      result.current.handleItemTextChange({ event, index: 0 })
+    })
+
+    expect(result.current.tasks[0].text.length).toBe(LIMIT_CARACTERS)
   })
 
   it('should handle complete item', () => {
