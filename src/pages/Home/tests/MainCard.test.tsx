@@ -24,6 +24,7 @@ describe('MainCard component', () => {
   })
 
   it('should render component', () => {
+    // @ts-expect-error-next-line
     useMainCard.mockReturnValue({
       listNameInputText: '',
       isEditingListName: false,
@@ -34,7 +35,7 @@ describe('MainCard component', () => {
       handleBlurListNameInput: vi.fn(),
       toggleIsEditingListName: vi.fn(),
     })
-
+    // @ts-expect-error-next-line
     useTask.mockReturnValue({
       tasks: [
         {
