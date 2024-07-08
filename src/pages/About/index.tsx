@@ -1,9 +1,11 @@
 function About() {
   return (
     <div className="flex w-full flex-col gap-4 md:max-w-[600px]">
-      <h3 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl">Sobre o Tiberius</h3>
+      <h3 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl dark:text-zinc-400">
+        Sobre o Tiberius
+      </h3>
 
-      <p className="leading-relaxed md:text-lg">
+      <p className="text-lg leading-relaxed dark:text-zinc-400">
         O Tiberius nasceu com um propósito: <i>diminuir a ansiedade por ter muitas tarefas.</i>
         <br />
         Ter uma vida produtiva não significa ter uma lista enorme de coisas para fazer e trabalhar em 10 coisas de uma
@@ -16,14 +18,16 @@ function About() {
         concluí-la. Me chamo Gabriel Paiva e quero te ajudar a ter uma vida mais produtiva com o Tiberius.
         <br />
         <br />
-        <q className="italic text-zinc-900">
+        <q className="text-lg italic text-zinc-900 dark:text-zinc-400">
           Comece fazendo o que é necessário, então faça o que é possível, e de repente você estará fazendo o impossível
         </q>
-        <small className="text-zinc-400"> - Francisco de Assis</small>
+        <small className="text-zinc-400 dark:text-zinc-500"> - Francisco de Assis</small>
         <br />
         <br />
-        <q className="italic text-zinc-900">Nem sempre precisamos fazer mais, mas sim nos concentrar em menos.</q>
-        <small className="text-zinc-400"> - Nathan W. Morris</small>
+        <q className="text-lg italic text-zinc-900 dark:text-zinc-400">
+          Nem sempre precisamos fazer mais, mas sim nos concentrar em menos.
+        </q>
+        <small className="text-zinc-400 dark:text-zinc-500"> - Nathan W. Morris</small>
       </p>
     </div>
   )

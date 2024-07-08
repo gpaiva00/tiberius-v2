@@ -1,0 +1,6 @@
+const LIMIT_CARACTERS = 250
+
+export {
+    LIMIT_CARACTERS
+}
+
