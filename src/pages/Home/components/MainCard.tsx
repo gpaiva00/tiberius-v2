@@ -55,7 +55,7 @@ function MainCard() {
         ) : (
           <div className="flex w-full items-center justify-between">
             <CardTitle
-              className="text-2xl hover:cursor-pointer hover:underline md:text-3xl dark:text-zinc-300"
+              className="text-2xl underline-offset-4 hover:cursor-pointer hover:underline md:text-2xl dark:text-zinc-300"
               onClick={toggleIsEditingListName}
             >
               {listName}
