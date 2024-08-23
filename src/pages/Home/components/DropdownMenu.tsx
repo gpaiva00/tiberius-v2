@@ -24,10 +24,10 @@ function DropdownMenu() {
     <OriginalDropdownMenu>
       <DropdownMenuTrigger>
         <Button
-          variant="outline"
-          size="icon"
+          variant="secondary"
+          // size="default"
         >
-          <Menu className="h-4 w-4" />
+          <Menu className="mr-2 h-4 w-4" /> Menu
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-72">
