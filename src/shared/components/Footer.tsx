@@ -6,7 +6,7 @@ import { ListChecks } from 'lucide-react'
 
 function Footer() {
   return (
-    <footer className="flex w-full items-center justify-between bg-white px-4 py-2 shadow dark:bg-zinc-900">
+    <footer className="flex w-full items-center justify-between bg-white px-4 py-2 dark:bg-zinc-900">
       <div className="flex items-center gap-2">
         <Link
           to={HOME_ROUTE}

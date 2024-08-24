@@ -1,5 +1,6 @@
 export * from './congratulations'
 export * from './itemsPlaceholder'
 export * from './localStorageKeys'
+export * from './prompts'
 export * from './routes'
 export * from './taskConfigs'
