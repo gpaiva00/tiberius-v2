@@ -6,7 +6,7 @@ const TaskSchema = z.object({
   deadline: z.string().optional(),
   resources: z.string().optional(),
   completed: z.boolean(),
-  placeholder: z.string(),
+  placeholder: z.string().optional(),
   quadrant: z.enum([
     "urgente e importante",
     "importante mas não urgente",
@@ -17,7 +17,8 @@ const TaskSchema = z.object({
   recommendation: z.object({
     order: z.number().optional(),
     description: z.string().optional()
-  })
+  }),
+  lastOrganizedAt: z.number().optional()
 })
 
 const TaskInputSchema = z.object({

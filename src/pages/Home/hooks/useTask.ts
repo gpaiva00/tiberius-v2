@@ -1,19 +1,29 @@
 import { useAtom, useAtomValue } from 'jotai'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { useToast } from '@/shared/components/ui/use-toast'
-import { getRandomString } from '@/shared/utils/getRandomString'
 
+import { useTaskOrganizer } from '@/pages/Home/hooks/useTaskOrganizer'
 import { emojis, LIMIT_CARACTERS, placeholders, quotes, titles } from '@/shared/constants'
 import { configsAtom, tasksAtom } from '@/shared/stores'
-import { Task } from '@/shared/types'
+import { Task, TaskInputSchema } from '@/shared/types'
+import { cleanTaskForAI, getRandomString, sortTasksByRecommendationOrder } from '@/shared/utils'
 
 function useTask() {
   const [taskInput, setTaskInput] = useAtom(tasksAtom)
+  const configs = useAtomValue(configsAtom)
+
   const [isClearingItem, setIsClearingItem] = useState(false)
   const [canDragItem, setCanDragItem] = useState(false)
+
   const { toast } = useToast()
-  const configs = useAtomValue(configsAtom)
+  const { organizeTasksWithAI: _organizeTasksWithAI, isOrganizing, canOrganizeWithAI } = useTaskOrganizer()
+
+  // const canOrganizeTasksWithAI = useMemo(() => {
+  //   return taskInput.tasks.some((task) => task.description.trim() !== '')
+  // }, [taskInput.tasks])
+
+  const sortedTasks = useMemo(() => sortTasksByRecommendationOrder(taskInput.tasks), [taskInput.tasks])
 
   function handleItemTextChange({ event, index }: { index: number; event: React.ChangeEvent<HTMLTextAreaElement> }) {
     const newTasks = [...taskInput.tasks]
@@ -32,6 +42,33 @@ function useTask() {
     })
 
     clearItem(index)
+  }
+
+  async function handleOrganizeTasksWithAI() {
+    if (!canOrganizeWithAI.canOrganize) {
+      toast({
+        title: 'Não é possível organizar com IA agora',
+        description: canOrganizeWithAI.reason,
+      })
+
+      return
+    }
+
+    try {
+      const newTasks = [...taskInput.tasks]
+      const tasksToOrganize = newTasks.filter((task) => task.description.trim() !== '').map(cleanTaskForAI)
+
+      const validatedTasks = TaskInputSchema.parse({ tasks: tasksToOrganize })
+
+      await _organizeTasksWithAI(validatedTasks)
+    } catch (error) {
+      console.error('Erro ao validar ou organizar tarefas:', error)
+      toast({
+        title: 'Erro',
+        description: 'Ocorreu um erro ao organizar as tarefas. Por favor, tente novamente.',
+        variant: 'destructive',
+      })
+    }
   }
 
   function reorderItems(items: Task[]) {
@@ -57,6 +94,9 @@ function useTask() {
           ...newTasks[index].recommendation,
           description: getRandomString(placeholders),
         },
+        deadline: '',
+        priority: undefined,
+        quadrant: undefined,
       }
 
       if (configs.autoReorder) {
@@ -98,12 +138,16 @@ function useTask() {
   }
 
   return {
-    tasks: taskInput.tasks,
+    tasks: sortedTasks,
+    canOrganizeTasksWithAI: canOrganizeWithAI.canOrganize,
+    organizationReason: canOrganizeWithAI.reason,
     reorderItems,
     canDragItem,
+    isOrganizing,
     isClearingItem,
     toggleCanDragItem,
     handleOnDropItem,
+    handleOrganizeTasksWithAI,
     handleCompleteItem,
     handleDragItemLeave,
     handleOnDragItemOver,

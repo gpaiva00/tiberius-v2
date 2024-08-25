@@ -40,7 +40,7 @@ function DropdownMenu() {
               className="flex items-center gap-1 font-normal capitalize"
             >
               <ArrowUpDown className="mr-2 h-4 w-4" />
-              Auto reorganizar
+              Auto Reordenar
               <HoverCard>
                 <HoverCardTrigger>
                   <Info className="h-3 w-3" />

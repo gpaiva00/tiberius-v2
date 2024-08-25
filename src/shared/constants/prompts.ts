@@ -16,6 +16,8 @@ Desenvolva um sistema de organização de tarefas que use a Matriz de Eisenhower
 Saída:
 Um objeto JSON contendo a lista de tarefas classificadas e priorizadas, com as seguintes propriedades:
 - tasks: uma lista de objetos representando as tarefas
+  - id: um identificador único para a tarefa
+  - completed: um indicador se a tarefa foi concluída ou não (não deve afetar a classificação ou prioridade da tarefa)
   - description: a descrição da tarefa
   - deadline: o prazo para concluir a tarefa
   - resources: os recursos necessários para realizar a tarefa
@@ -27,7 +29,9 @@ Exemplo de saída em formato JSON:
 {
   "tasks": [
     {
+      "id": number,
       "description": string,
+      "completed": boolean,
       "deadline": string (opcional),
       "resources": string (opcional),
       "quadrant": "urgente e importante" | "importante mas não urgente" | "urgente mas não importante" | "não urgente e não importante",
@@ -48,13 +52,13 @@ Exemplo da estrutura correta do campo 'recommendation':
 
 Importante:
 1. O conteúdo dos campos deve estar em português, MAS os nomes dos campos devem permanecer em inglês.
-2. A saída deve ser apenas o JSON com as tarefas organizadas, sem nenhuma mensagem adicional.
+2. A saída DEVE ser um objeto JSON com uma propriedade 'tasks' que é um array de objetos de tarefa.
 3. Mantenha os valores originais de 'description' conforme fornecido na entrada.
-4. Se não houver deadline ou recursos para uma tarefa, esses campos devem retornar como 'null'.
-5. O campo 'quadrant' deve ser exatamente um dos quatro valores especificados em português.
-6. O campo 'priority' deve ser exatamente "alta", "média" ou "baixa".
+4. Se não houver deadline ou recursos para uma tarefa, esses campos devem retornar como strings vazias.
+5. O campo 'quadrant' DEVE ser EXATAMENTE um dos quatro valores especificados em português.
+6. O campo 'priority' DEVE ser EXATAMENTE "alta", "média" ou "baixa". Não use variações como "mídia" ou outras.
 7. O campo 'recommendation' DEVE ser um objeto com os campos 'order' e 'resources' em inglês, ambos contendo strings em português.
-8. Certifique-se de que a saída contenha todas as propriedades especificadas para cada tarefa, mesmo que algumas sejam opcionais na entrada.
+8. Certifique-se de que a saída contenha TODAS as propriedades especificadas para cada tarefa, mesmo que algumas sejam opcionais na entrada.
 
 Sempre siga estas instruções ao organizar tarefas, garantindo que a estrutura da saída corresponda exatamente ao formato especificado.`
 

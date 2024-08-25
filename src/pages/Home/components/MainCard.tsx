@@ -2,19 +2,21 @@
 
 import classnames from 'classnames'
 
+import { Badge } from '@/shared/components/ui/badge'
+import { Button } from '@/shared/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card'
 import { Checkbox } from '@/shared/components/ui/checkbox'
 import { Input } from '@/shared/components/ui/input'
+import { Textarea } from '@/shared/components/ui/textarea'
 
+import { DropdownMenu } from '@/pages/Home/components/DropdownMenu'
 import { useMainCard, useTask } from '@/pages/Home/hooks'
 
-import { Textarea } from '@/shared/components/ui/textarea'
 import { LIMIT_CARACTERS } from '@/shared/constants'
-import { DropdownMenu } from './DropdownMenu'
 
-import { Badge } from '@/shared/components/ui/badge'
-import { Button } from '@/shared/components/ui/button'
-import { GripVertical, Sparkles } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+import { GripVertical, Info, Sparkles } from 'lucide-react'
 
 function MainCard() {
   const {
@@ -39,6 +41,9 @@ function MainCard() {
     handleOnDragItemStart,
     toggleCanDragItem,
     isClearingItem,
+    canOrganizeTasksWithAI,
+    isOrganizing,
+    handleOrganizeTasksWithAI,
   } = useTask()
 
   return (
@@ -63,8 +68,17 @@ function MainCard() {
               {listName}
             </CardTitle>
             <div className="flex items-center space-x-4">
-              <Button variant="default">
-                <Sparkles className="mr-2 h-4 w-4" /> Organizar com IA
+              <Button
+                variant="default"
+                disabled={isOrganizing}
+                onClick={handleOrganizeTasksWithAI}
+                className={cn('gap-2', {
+                  'animate-pulse': isOrganizing,
+                })}
+              >
+                <Sparkles className="h-4 w-4" />
+                {isOrganizing ? 'Organizando...' : 'Organizar com IA'}
+                {!canOrganizeTasksWithAI && <Info className="h-4 w-4 text-orange-500" />}
               </Button>
               <DropdownMenu />
             </div>
@@ -76,21 +90,20 @@ function MainCard() {
         <CardContent className="p-0">
           {tasks.map(({ id, description, completed, placeholder, quadrant }, index) => (
             <>
-              {quadrant && (
-                <div className="flex w-full flex-col items-end justify-center pr-4 pt-2">
-                  <Badge variant="default">Fazer agora</Badge>
-                </div>
-              )}
-
               <div
                 key={index}
                 className="flex h-24 space-x-4 border-b px-2 py-2 last:border-b-0 dark:border-b-zinc-800"
-                draggable={!!description.length && canDragItem}
+                draggable={!description.length && canDragItem}
                 onDragStart={(event) => handleOnDragItemStart(event, index)}
                 onDragOver={(event) => handleOnDragItemOver(event)}
                 onDrop={(event) => handleOnDropItem(event, index)}
                 onDragLeave={(event) => handleDragItemLeave(event)}
               >
+                {quadrant && (
+                  <div className="flex w-full flex-col items-end justify-center pr-4 pt-2">
+                    <Badge variant="default">{quadrant}</Badge>
+                  </div>
+                )}
                 <div className="flex items-start gap-2">
                   <button
                     disabled={!description.length}

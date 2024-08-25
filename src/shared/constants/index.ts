@@ -1,3 +1,4 @@
+export * from './aiConfigs'
 export * from './congratulations'
 export * from './itemsPlaceholder'
 export * from './localStorageKeys'
