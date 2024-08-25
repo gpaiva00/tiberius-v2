@@ -3,9 +3,14 @@ import { useMemo, useState } from 'react'
 
 import { ASK_FOR_TASKS_PROMPT } from '@/shared/constants/prompts'
 import { tasksAtom } from '@/shared/stores'
-import { getPromptResult, sortTasksByRecommendationOrder } from '@/shared/utils'
+import { getPromptResult, isTestText, sortTasksByRecommendationOrder } from '@/shared/utils'
 
-import { MAX_ORGANIZATIONS_PER_DAY, MIN_TASKS, MIN_TIME_BETWEEN_ORGANIZATIONS, MIN_TIME_SINCE_LAST_TASK_ORGANIZATION } from '@/shared/constants'
+import {
+  MAX_ORGANIZATIONS_PER_DAY,
+  MIN_TASKS,
+  MIN_TIME_BETWEEN_ORGANIZATIONS,
+  MIN_TIME_SINCE_LAST_TASK_ORGANIZATION,
+} from '@/shared/constants'
 import { TaskInput, TaskOutput } from '@/shared/types'
 
 export function useTaskOrganizer() {
@@ -39,7 +44,7 @@ export function useTaskOrganizer() {
 
       setTaskInput({ tasks: sortedTasks })
       setLastOrganizationTime(Date.now())
-      setOrganizationsToday(prev => prev + 1)
+      setOrganizationsToday((prev) => prev + 1)
     } catch (error) {
       console.error('Erro ao organizar tarefas:', error)
       throw error // Re-throw the error to be caught in useTask
@@ -49,27 +54,48 @@ export function useTaskOrganizer() {
   }
 
   const canOrganizeWithAI = useMemo(() => {
-    const nonEmptyTasks = taskInput.tasks.filter(task => task.description.trim() !== '')
+    const nonEmptyTasks = taskInput.tasks.filter((task) => task.description.trim() !== '')
     const now = Date.now()
 
     if (nonEmptyTasks.length < MIN_TASKS) {
-      return { canOrganize: false, reason: `Você precisa de pelo menos ${MIN_TASKS} tarefas não vazias para organizar com IA.` }
+      return {
+        canOrganize: false,
+        reason: `Você precisa de pelo menos ${MIN_TASKS} tarefas não vazias para organizar com IA.`,
+      }
+    }
+
+    const testTasks = nonEmptyTasks.filter((task) => isTestText(task.description))
+    if (testTasks.length > 0) {
+      return {
+        canOrganize: false,
+        reason: 'Algumas tarefas parecem ser texto de teste. Por favor, forneça descrições de tarefas reais.',
+      }
     }
 
     if (now - lastOrganizationTime < MIN_TIME_BETWEEN_ORGANIZATIONS) {
       const remainingTime = Math.ceil((MIN_TIME_BETWEEN_ORGANIZATIONS - (now - lastOrganizationTime)) / 60000)
-      return { canOrganize: false, reason: `Por favor, aguarde mais ${remainingTime} minutos antes de organizar novamente.` }
+      return {
+        canOrganize: false,
+        reason: `Por favor, aguarde mais ${remainingTime} minutos antes de organizar novamente.`,
+      }
     }
 
     if (organizationsToday >= MAX_ORGANIZATIONS_PER_DAY) {
-      return { canOrganize: false, reason: `Você atingiu o limite de ${MAX_ORGANIZATIONS_PER_DAY} organizações por dia.` }
+      return {
+        canOrganize: false,
+        reason: `Você atingiu o limite de ${MAX_ORGANIZATIONS_PER_DAY} organizações por dia.`,
+      }
     }
 
-    const recentlyOrganizedTask = taskInput.tasks.find(task =>
-      task.lastOrganizedAt && (now - task.lastOrganizedAt) < MIN_TIME_SINCE_LAST_TASK_ORGANIZATION
+    const recentlyOrganizedTask = taskInput.tasks.find(
+      (task) => task.lastOrganizedAt && now - task.lastOrganizedAt < MIN_TIME_SINCE_LAST_TASK_ORGANIZATION
     )
     if (recentlyOrganizedTask) {
-      return { canOrganize: false, reason: 'Algumas tarefas foram organizadas recentemente. Por favor, aguarde um pouco antes de organizar novamente.' }
+      return {
+        canOrganize: false,
+        reason:
+          'Algumas tarefas foram organizadas recentemente. Por favor, aguarde um pouco antes de organizar novamente.',
+      }
     }
 
     return { canOrganize: true }

@@ -19,10 +19,6 @@ function useTask() {
   const { toast } = useToast()
   const { organizeTasksWithAI: _organizeTasksWithAI, isOrganizing, canOrganizeWithAI } = useTaskOrganizer()
 
-  // const canOrganizeTasksWithAI = useMemo(() => {
-  //   return taskInput.tasks.some((task) => task.description.trim() !== '')
-  // }, [taskInput.tasks])
-
   const sortedTasks = useMemo(() => sortTasksByRecommendationOrder(taskInput.tasks), [taskInput.tasks])
 
   function handleItemTextChange({ event, index }: { index: number; event: React.ChangeEvent<HTMLTextAreaElement> }) {
