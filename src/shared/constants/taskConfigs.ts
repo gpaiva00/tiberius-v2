@@ -1,6 +1,4 @@
 const LIMIT_CARACTERS = 250
+const LIMIT_TASKS = 5
 
-export {
-    LIMIT_CARACTERS
-}
-
+export { LIMIT_CARACTERS, LIMIT_TASKS }

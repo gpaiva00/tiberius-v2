@@ -74,16 +74,18 @@ function MainCard() {
 
       <Card className="w-full rounded-md border border-zinc-200 shadow-lg md:w-[600px] dark:border-zinc-800 dark:bg-zinc-950">
         <CardContent className="p-0">
-          {tasks.map(({ id, text, completed, placeholder }, index) => (
+          {tasks.map(({ id, description, completed, placeholder, quadrant }, index) => (
             <>
-              <div className="flex w-full flex-col items-end justify-center pr-4 pt-2">
-                <Badge variant="default">Fazer agora</Badge>
-              </div>
+              {quadrant && (
+                <div className="flex w-full flex-col items-end justify-center pr-4 pt-2">
+                  <Badge variant="default">Fazer agora</Badge>
+                </div>
+              )}
 
               <div
                 key={index}
                 className="flex h-24 space-x-4 border-b px-2 py-2 last:border-b-0 dark:border-b-zinc-800"
-                draggable={!!text.length && canDragItem}
+                draggable={!!description.length && canDragItem}
                 onDragStart={(event) => handleOnDragItemStart(event, index)}
                 onDragOver={(event) => handleOnDragItemOver(event)}
                 onDrop={(event) => handleOnDropItem(event, index)}
@@ -91,7 +93,7 @@ function MainCard() {
               >
                 <div className="flex items-start gap-2">
                   <button
-                    disabled={!text.length}
+                    disabled={!description.length}
                     onMouseEnter={toggleCanDragItem}
                     onMouseLeave={toggleCanDragItem}
                     className="mt-[5.4px] cursor-move text-zinc-300 transition-all hover:text-zinc-400 disabled:cursor-not-allowed disabled:text-zinc-200 dark:text-zinc-500 dark:disabled:text-zinc-600"
@@ -102,7 +104,7 @@ function MainCard() {
                     key={`item-${id}`}
                     className="mt-[5.4px] border-zinc-600 transition-all disabled:border-zinc-400 dark:border-zinc-300 dark:disabled:border-zinc-600"
                     checked={completed}
-                    disabled={!text.length}
+                    disabled={!description.length}
                     onCheckedChange={() => (isClearingItem ? null : handleCompleteItem(index))}
                   />
                 </div>
@@ -115,7 +117,7 @@ function MainCard() {
                       'text-zinc-200 line-through dark:text-zinc-500': completed,
                     }
                   )}
-                  value={text}
+                  value={description}
                   onChange={(event) => handleItemTextChange({ event, index })}
                   placeholder={configs?.hideSuggestions ? '' : placeholder}
                   maxLength={LIMIT_CARACTERS}

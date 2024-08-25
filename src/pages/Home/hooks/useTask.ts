@@ -6,32 +6,25 @@ import { getRandomString } from '@/shared/utils/getRandomString'
 
 import { emojis, LIMIT_CARACTERS, placeholders, quotes, titles } from '@/shared/constants'
 import { configsAtom, tasksAtom } from '@/shared/stores'
-
-import { ListItem } from '@/shared/types'
+import { Task } from '@/shared/types'
 
 function useTask() {
-  const [tasks, setTasks] = useAtom(tasksAtom)
-
+  const [taskInput, setTaskInput] = useAtom(tasksAtom)
   const [isClearingItem, setIsClearingItem] = useState(false)
   const [canDragItem, setCanDragItem] = useState(false)
-
   const { toast } = useToast()
   const configs = useAtomValue(configsAtom)
 
   function handleItemTextChange({ event, index }: { index: number; event: React.ChangeEvent<HTMLTextAreaElement> }) {
-    const newTasks = [...tasks]
-
-    newTasks[index].text = event.target.value.slice(0, LIMIT_CARACTERS)
-
-    setTasks(newTasks)
+    const newTasks = [...taskInput.tasks]
+    newTasks[index].description = event.target.value.slice(0, LIMIT_CARACTERS)
+    setTaskInput({ tasks: newTasks })
   }
 
   function handleCompleteItem(index: number) {
-    const newTasks = [...tasks]
-
+    const newTasks = [...taskInput.tasks]
     newTasks[index].completed = !newTasks[index].completed
-
-    setTasks(newTasks)
+    setTaskInput({ tasks: newTasks })
 
     toast({
       title: `${getRandomString(titles)} ${getRandomString(emojis)}`,
@@ -41,17 +34,12 @@ function useTask() {
     clearItem(index)
   }
 
-  function reorderItems(items: ListItem[]) {
-    const newTasks = [...items]
-
-    newTasks.sort((a, b) => {
-      if (!a.text && b.text) return 1
-      if (a.text && !b.text) return -1
-
+  function reorderItems(items: Task[]) {
+    return items.sort((a, b) => {
+      if (!a.description && b.description) return 1
+      if (a.description && !b.description) return -1
       return 0
     })
-
-    return newTasks
   }
 
   function clearItem(index: number) {
@@ -60,21 +48,22 @@ function useTask() {
     setIsClearingItem(true)
 
     setTimeout(() => {
-      let newTasks = [...tasks]
-
+      let newTasks = [...taskInput.tasks]
       newTasks[index] = {
         ...newTasks[index],
-        text: '',
+        description: '',
         completed: false,
-        placeholder: getRandomString(placeholders),
+        recommendation: {
+          ...newTasks[index].recommendation,
+          description: getRandomString(placeholders),
+        },
       }
 
       if (configs.autoReorder) {
         newTasks = reorderItems(newTasks)
       }
 
-      setTasks(newTasks)
-
+      setTaskInput({ tasks: newTasks })
       setIsClearingItem(false)
     }, 1000)
   }
@@ -96,12 +85,12 @@ function useTask() {
     event.preventDefault()
     event.currentTarget.classList.remove('drag-over')
     const dragIndex = Number(event.dataTransfer.getData('text/plain'))
-    const newTasks = [...tasks]
+    const newTasks = [...taskInput.tasks]
     const [draggedItem] = newTasks.splice(dragIndex, 1)
 
     newTasks.splice(index, 0, draggedItem)
 
-    setTasks(newTasks)
+    setTaskInput({ tasks: newTasks })
   }
 
   function toggleCanDragItem() {
@@ -109,7 +98,7 @@ function useTask() {
   }
 
   return {
-    tasks,
+    tasks: taskInput.tasks,
     reorderItems,
     canDragItem,
     isClearingItem,
