@@ -16,7 +16,8 @@ import { LIMIT_CARACTERS } from '@/shared/constants'
 
 import { cn } from '@/lib/utils'
 
-import { GripVertical, Info, Sparkles } from 'lucide-react'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/shared/components/ui/hover-card'
+import { GripVertical, Info, Lightbulb, Sparkles } from 'lucide-react'
 
 function MainCard() {
   const {
@@ -88,22 +89,39 @@ function MainCard() {
 
       <Card className="w-full rounded-md border border-zinc-200 shadow-lg md:w-[600px] dark:border-zinc-800 dark:bg-zinc-950">
         <CardContent className="p-0">
-          {tasks.map(({ id, description, completed, placeholder, quadrant }, index) => (
-            <>
-              <div
-                key={index}
-                className="flex h-24 space-x-4 border-b px-2 py-2 last:border-b-0 dark:border-b-zinc-800"
-                draggable={!description.length && canDragItem}
-                onDragStart={(event) => handleOnDragItemStart(event, index)}
-                onDragOver={(event) => handleOnDragItemOver(event)}
-                onDrop={(event) => handleOnDropItem(event, index)}
-                onDragLeave={(event) => handleDragItemLeave(event)}
-              >
-                {quadrant && (
-                  <div className="flex w-full flex-col items-end justify-center pr-4 pt-2">
-                    <Badge variant="default">{quadrant}</Badge>
-                  </div>
-                )}
+          {tasks.map(({ id, description, completed, placeholder, quadrant, recommendation }, index) => (
+            <div
+              key={index}
+              className="flex flex-col border-b last:border-b-0 dark:border-b-zinc-800"
+              draggable={!!description.length && canDragItem}
+              onDragStart={(event) => handleOnDragItemStart(event, index)}
+              onDragOver={(event) => handleOnDragItemOver(event)}
+              onDrop={(event) => handleOnDropItem(event, index)}
+              onDragLeave={(event) => handleDragItemLeave(event)}
+            >
+              {quadrant && (
+                <div className="flex items-center justify-end space-x-4 p-4">
+                  <Badge
+                    variant="secondary"
+                    className="text-xs"
+                  >
+                    {quadrant}
+                  </Badge>
+
+                  {recommendation.description && (
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <Lightbulb className="h-4 w-4 text-zinc-400 hover:text-zinc-600" />
+                      </HoverCardTrigger>
+                      <HoverCardContent className="w-fit">
+                        <p className="text-sm">{recommendation.description}</p>
+                      </HoverCardContent>
+                    </HoverCard>
+                  )}
+                </div>
+              )}
+
+              <div className="flex h-24 space-x-4 px-2 py-2">
                 <div className="flex items-start gap-2">
                   <button
                     disabled={!description.length}
@@ -136,7 +154,7 @@ function MainCard() {
                   maxLength={LIMIT_CARACTERS}
                 />
               </div>
-            </>
+            </div>
           ))}
         </CardContent>
       </Card>
