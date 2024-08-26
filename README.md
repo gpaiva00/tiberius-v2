@@ -1,11 +1,3 @@
-<p align="center">
-	<h1 align="center"><b>Tiberius</b></h1>
-  <p align="center">
-
-  </p>
-
-  <img src="" width="auto" height="auto">
-</p>
 ![hero](/public/demo.jpeg)
 
 <p align="center">
