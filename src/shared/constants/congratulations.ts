@@ -1,13 +1,4 @@
-const titles = [
-  'Parabéns!',
-  'Uau!',
-  'Magnífico!',
-  'Fantástico!',
-  'Esplêndido!',
-  'Supimpa!',
-  'Bom demais!',
-  'Merece um troféu!',
-]
+const titles = ['Parabéns', 'Uau', 'Magnífico', 'Fantástico', 'Esplêndido', 'Supimpa', 'Bom demais', 'Merece um troféu']
 
 const quotes = [
   'Mestre das tarefas! Continue brilhando!',

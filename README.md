@@ -1,6 +1,8 @@
-<h1 style="text-align: center">
-<img src="./public/logo.svg">
-TIBERIUS
-</h1>
+<p align="center">
+	<h1 align="center"><b>Tiberius</b></h1>
+  <p align="center">
+    Minimalist Task Management App
+  </p>
 
-<h4>Minimalist Task Management App</h4>
+  <img src="/public/demo.jpeg" width="auto" height="auto">
+</p>
