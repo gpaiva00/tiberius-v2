@@ -3,11 +3,16 @@ import { useMemo, useState } from 'react'
 
 import { useToast } from '@/shared/components/ui/use-toast'
 
-import { useTaskOrganizer } from '@/pages/Home/hooks/useTaskOrganizer'
+import { useTaskOrganizer } from '@/pages/Home/hooks'
 import { emojis, LIMIT_CARACTERS, placeholders, quotes, titles } from '@/shared/constants'
 import { configsAtom, tasksAtom } from '@/shared/stores'
-import { Task, TaskInputSchema } from '@/shared/types'
-import { cleanTaskForAI, getRandomString, sortTasksByRecommendationOrder } from '@/shared/utils'
+import { TaskInputSchema } from '@/shared/types'
+import {
+  cleanTaskForAI,
+  getRandomString,
+  reorderTasksByEmptyDescription,
+  sortTasksByRecommendationOrder,
+} from '@/shared/utils'
 
 function useTask() {
   const [taskInput, setTaskInput] = useAtom(tasksAtom)
@@ -67,14 +72,6 @@ function useTask() {
     }
   }
 
-  function reorderItems(items: Task[]) {
-    return items.sort((a, b) => {
-      if (!a.description && b.description) return 1
-      if (a.description && !b.description) return -1
-      return 0
-    })
-  }
-
   function clearItem(index: number) {
     if (isClearingItem) return
 
@@ -87,7 +84,7 @@ function useTask() {
         description: '',
         completed: false,
         recommendation: {
-          ...newTasks[index].recommendation,
+          order: undefined,
           description: getRandomString(placeholders),
         },
         deadline: '',
@@ -96,7 +93,7 @@ function useTask() {
       }
 
       if (configs.autoReorder) {
-        newTasks = reorderItems(newTasks)
+        newTasks = reorderTasksByEmptyDescription(newTasks)
       }
 
       setTaskInput({ tasks: newTasks })
@@ -135,9 +132,8 @@ function useTask() {
 
   return {
     tasks: sortedTasks,
-    canOrganizeTasksWithAI: canOrganizeWithAI.canOrganize,
-    organizationReason: canOrganizeWithAI.reason,
-    reorderItems,
+    canOrganizeWithAI,
+    reorderTasksByEmptyDescription,
     canDragItem,
     isOrganizing,
     isClearingItem,

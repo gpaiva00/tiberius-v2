@@ -6,18 +6,26 @@ import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card'
 import { Checkbox } from '@/shared/components/ui/checkbox'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/shared/components/ui/hover-card'
 import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
 
 import { DropdownMenu } from '@/pages/Home/components/DropdownMenu'
-import { useMainCard, useTask } from '@/pages/Home/hooks'
+import { OrganizationReasonCode, useMainCard, useTask } from '@/pages/Home/hooks'
 
 import { LIMIT_CARACTERS } from '@/shared/constants'
 
 import { cn } from '@/lib/utils'
 
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/shared/components/ui/hover-card'
-import { GripVertical, Info, Lightbulb, Sparkles } from 'lucide-react'
+import { CalendarClock, GripVertical, Hourglass, Info, Lightbulb, Sparkles, Star } from 'lucide-react'
+
+const canOrganizeIcons: Record<OrganizationReasonCode, React.ReactNode> = {
+  MAX_ORGANIZATIONS_PER_DAY: <CalendarClock className="h-4 w-4 text-orange-500" />,
+  MIN_TASKS: <Info className="h-4 w-4 text-orange-500" />,
+  MIN_TIME_BETWEEN_ORGANIZATIONS: <Hourglass className="h-4 w-4 text-orange-500" />,
+  RECENTLY_ORGANIZED: <Hourglass className="h-4 w-4 text-orange-500" />,
+  TEST_TEXT: <Info className="h-4 w-4 text-orange-500" />,
+}
 
 function MainCard() {
   const {
@@ -42,7 +50,7 @@ function MainCard() {
     handleOnDragItemStart,
     toggleCanDragItem,
     isClearingItem,
-    canOrganizeTasksWithAI,
+    canOrganizeWithAI,
     isOrganizing,
     handleOrganizeTasksWithAI,
   } = useTask()
@@ -63,7 +71,7 @@ function MainCard() {
         ) : (
           <div className="flex w-full items-center justify-between">
             <CardTitle
-              className="text-2xl underline-offset-4 hover:cursor-pointer hover:underline md:text-2xl dark:text-zinc-300"
+              className="text-2xl underline-offset-4 hover:cursor-pointer hover:underline dark:text-zinc-300 md:text-2xl"
               onClick={toggleIsEditingListName}
             >
               {listName}
@@ -78,8 +86,10 @@ function MainCard() {
                 })}
               >
                 <Sparkles className="h-4 w-4" />
-                {isOrganizing ? 'Organizando...' : 'Organizar com IA'}
-                {!canOrganizeTasksWithAI && <Info className="h-4 w-4 text-orange-500" />}
+                {isOrganizing ? 'Organizando...' : 'Organizar'}
+                {!canOrganizeWithAI.canOrganize &&
+                  canOrganizeWithAI.reasonCode &&
+                  canOrganizeIcons[canOrganizeWithAI.reasonCode]}
               </Button>
               <DropdownMenu />
             </div>
@@ -87,9 +97,9 @@ function MainCard() {
         )}
       </CardHeader>
 
-      <Card className="w-full rounded-md border border-zinc-200 shadow-lg md:w-[600px] dark:border-zinc-800 dark:bg-zinc-950">
+      <Card className="w-full rounded-md border border-zinc-200 shadow-lg dark:border-zinc-800 dark:bg-zinc-950 md:w-[600px]">
         <CardContent className="p-0">
-          {tasks.map(({ id, description, completed, placeholder, quadrant, recommendation }, index) => (
+          {tasks.map(({ id, description, completed, placeholder, quadrant, recommendation, priority }, index) => (
             <div
               key={index}
               className="flex flex-col border-b last:border-b-0 dark:border-b-zinc-800"
@@ -100,7 +110,8 @@ function MainCard() {
               onDragLeave={(event) => handleDragItemLeave(event)}
             >
               {quadrant && (
-                <div className="flex items-center justify-end space-x-4 p-4">
+                <div className="flex items-center justify-end space-x-4 px-4 pt-4">
+                  {priority === 'alta' && <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />}
                   <Badge
                     variant="secondary"
                     className="text-xs"
@@ -111,7 +122,7 @@ function MainCard() {
                   {recommendation.description && (
                     <HoverCard>
                       <HoverCardTrigger asChild>
-                        <Lightbulb className="h-4 w-4 text-zinc-400 hover:text-zinc-600" />
+                        <Lightbulb className="h-4 w-4 text-zinc-400 hover:text-yellow-500" />
                       </HoverCardTrigger>
                       <HoverCardContent className="w-fit">
                         <p className="text-sm">{recommendation.description}</p>

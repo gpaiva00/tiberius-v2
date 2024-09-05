@@ -11,15 +11,15 @@ const groq = createOpenAI({
 
 async function getPromptResult(prompt: string): Promise<TaskOutput> {
   const result = await generateObject({
-    model: groq('llama3-8b-8192'),
-    mode: 'auto',
+    model: groq('llama-3.1-8b-instant'),
+    mode: 'tool',
     system: SYSTEM_PROMPT,
     prompt,
     schema: TaskOutputSchema,
-    temperature: 1,
-    maxTokens: 1024,
+    temperature: 0.3,
+    maxTokens: 2048,
     output: 'object',
-    topP: 1,
+    topP: 0.9,
   })
 
   const parsed = TaskOutputSchema.parse(result.object)

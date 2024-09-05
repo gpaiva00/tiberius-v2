@@ -1,7 +1,7 @@
 function About() {
   return (
     <div className="flex w-full flex-col gap-4 md:max-w-[600px]">
-      <h3 className="text-2xl font-semibold leading-none tracking-tight md:text-3xl dark:text-zinc-400">
+      <h3 className="text-2xl font-semibold leading-none tracking-tight dark:text-zinc-400 md:text-3xl">
         Sobre o Tiberius
       </h3>
 
@@ -19,15 +19,15 @@ function About() {
         <br />
         <br />
         <q className="text-lg italic text-zinc-900 dark:text-zinc-400">
-          Comece fazendo o que é necessário, então faça o que é possível, e de repente você estará fazendo o impossível
+          Comece fazendo o que é necessário, então faça o que é possível, e de repente você estará fazendo o impossível.
         </q>
-        <small className="text-zinc-400 dark:text-zinc-500"> - Francisco de Assis</small>
+        <small className="text-base text-zinc-500 dark:text-zinc-500"> - Francisco de Assis</small>
         <br />
         <br />
         <q className="text-lg italic text-zinc-900 dark:text-zinc-400">
           Nem sempre precisamos fazer mais, mas sim nos concentrar em menos.
         </q>
-        <small className="text-zinc-400 dark:text-zinc-500"> - Nathan W. Morris</small>
+        <small className="text-base text-zinc-500 dark:text-zinc-500"> - Nathan W. Morris</small>
       </p>
     </div>
   )

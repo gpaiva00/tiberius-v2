@@ -17,4 +17,17 @@ function sortTasksByRecommendationOrder(tasks: Task[]): Task[] {
   })
 }
 
-export { cleanTaskForAI, sortTasksByRecommendationOrder }
+/**
+ * Reorder items based on their description.
+ *
+ * @description If a task doesn't have a description, it will be placed at the bottom.
+ */
+function reorderTasksByEmptyDescription(items: Task[]) {
+  return items.sort((a, b) => {
+    if (!a.description && b.description) return 1
+    if (a.description && !b.description) return -1
+    return 0
+  })
+}
+
+export { cleanTaskForAI, reorderTasksByEmptyDescription, sortTasksByRecommendationOrder }
