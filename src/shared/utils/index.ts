@@ -1,5 +1,6 @@
 export * from './ai'
 export * from './getRandomString'
+export * from './nanoid'
 export * from './taskUtils'
 export * from './textValidation'
 export * from './toggleArrayItem'

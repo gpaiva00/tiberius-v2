@@ -14,8 +14,11 @@ function About() {
           Produtividade tem a ver com definir tarefas e encontrar maneiras de realizá-las de forma eficaz e eficiente.
         </b>
         <br />
-        Sendo assim, comecei a trabalhar num projeto que me ajudasse a começar uma tarefa e, mais importante,
-        concluí-la. Me chamo Gabriel Paiva e quero te ajudar a ter uma vida mais produtiva com o Tiberius.
+        Como a inteligência artificial veio para ficar, decidi que seria melhor usar a IA para organizar as tarefas e,
+        assim, tirar o máximo proveito do Tiberius. Agora você pode organizar e priorizar suas tarefas com facilidade. O
+        Tiberius te ajuda a ver o que é importante, o que é necessário e o que é urgente. Além disso, nossa IA é capaz
+        de entender o contexto da tarefa e sugerir recomendações para concluir a tarefa de forma mais eficiente. Me
+        chamo Gabriel Paiva e quero te ajudar a ter uma vida mais produtiva com o Tiberius.
         <br />
         <br />
         <q className="text-lg italic text-zinc-900 dark:text-zinc-400">

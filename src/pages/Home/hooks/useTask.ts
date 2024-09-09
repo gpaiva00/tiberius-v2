@@ -1,3 +1,4 @@
+import debounce from 'debounce'
 import { useAtom, useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
 
@@ -6,12 +7,13 @@ import { useToast } from '@/shared/components/ui/use-toast'
 import { useTaskOrganizer } from '@/pages/Home/hooks'
 import { emojis, LIMIT_CARACTERS, placeholders, quotes, titles } from '@/shared/constants'
 import { configsAtom, tasksAtom } from '@/shared/stores'
-import { TaskInputSchema } from '@/shared/types'
+import { Task, TaskInputSchema } from '@/shared/types'
 import {
-  cleanTaskForAI,
-  getRandomString,
-  reorderTasksByEmptyDescription,
-  sortTasksByRecommendationOrder,
+    cleanTaskForAI,
+    getRandomString,
+    nanoid,
+    reorderTasksByEmptyDescription,
+    sortTasksByRecommendationOrder,
 } from '@/shared/utils'
 
 function useTask() {
@@ -32,9 +34,12 @@ function useTask() {
     setTaskInput({ tasks: newTasks })
   }
 
-  function handleCompleteItem(index: number) {
+  function handleCompleteTask(id: Task['id']) {
     const newTasks = [...taskInput.tasks]
-    newTasks[index].completed = !newTasks[index].completed
+    const task = newTasks.find((task) => task.id === id)
+    if (!task) return
+
+    task.completed = true
     setTaskInput({ tasks: newTasks })
 
     toast({
@@ -42,7 +47,39 @@ function useTask() {
       description: `${getRandomString(quotes)}`,
     })
 
-    clearItem(index)
+    clearTask(task)
+  }
+
+  function clearTask(task: Task) {
+    if (isClearingItem) return
+
+    setIsClearingItem(true)
+
+    let _task = {...task}
+    let newTasks = [...taskInput.tasks]
+
+    debounce(() => {
+      _task = {
+        ..._task,
+        id: nanoid(),
+        description: '',
+        completed: false,
+        recommendation: {
+          order: undefined,
+          description: getRandomString(placeholders),
+        },
+        deadline: '',
+        priority: undefined,
+        quadrant: undefined,
+      }
+
+      if (configs.autoReorder) {
+        newTasks = reorderTasksByEmptyDescription(newTasks)
+      }
+
+      setTaskInput({ tasks: newTasks })
+      setIsClearingItem(false)
+    }, 500)
   }
 
   async function handleOrganizeTasksWithAI() {
@@ -70,35 +107,6 @@ function useTask() {
         variant: 'destructive',
       })
     }
-  }
-
-  function clearItem(index: number) {
-    if (isClearingItem) return
-
-    setIsClearingItem(true)
-
-    setTimeout(() => {
-      let newTasks = [...taskInput.tasks]
-      newTasks[index] = {
-        ...newTasks[index],
-        description: '',
-        completed: false,
-        recommendation: {
-          order: undefined,
-          description: getRandomString(placeholders),
-        },
-        deadline: '',
-        priority: undefined,
-        quadrant: undefined,
-      }
-
-      if (configs.autoReorder) {
-        newTasks = reorderTasksByEmptyDescription(newTasks)
-      }
-
-      setTaskInput({ tasks: newTasks })
-      setIsClearingItem(false)
-    }, 1000)
   }
 
   function handleOnDragItemStart(event: React.DragEvent<HTMLDivElement>, index: number) {
@@ -140,7 +148,7 @@ function useTask() {
     toggleCanDragItem,
     handleOnDropItem,
     handleOrganizeTasksWithAI,
-    handleCompleteItem,
+    handleCompleteTask,
     handleDragItemLeave,
     handleOnDragItemOver,
     handleOnDragItemStart,

@@ -2,11 +2,11 @@ import { atomWithStorage } from 'jotai/utils'
 
 import { LIMIT_TASKS, placeholders, TASKS_STORAGE_KEY } from '@/shared/constants'
 import { TaskInput } from '@/shared/types'
-import { getRandomString } from '@/shared/utils/getRandomString'
+import { getRandomString, nanoid } from '@/shared/utils'
 
 const initialTasks: TaskInput = {
-  tasks: Array.from({ length: LIMIT_TASKS }, (_, index) => ({
-    id: index,
+  tasks: Array.from({ length: LIMIT_TASKS }, () => ({
+    id: nanoid(),
     description: '',
     completed: false,
     placeholder: getRandomString(placeholders),

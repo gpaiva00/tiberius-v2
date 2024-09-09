@@ -17,14 +17,14 @@ import { LIMIT_CARACTERS } from '@/shared/constants'
 
 import { cn } from '@/lib/utils'
 
-import { CalendarClock, GripVertical, Hourglass, Info, Lightbulb, Sparkles, Star } from 'lucide-react'
+import { CalendarClock, GripVertical, Hourglass, Lightbulb, Sparkles, Star } from 'lucide-react'
 
 const canOrganizeIcons: Record<OrganizationReasonCode, React.ReactNode> = {
   MAX_ORGANIZATIONS_PER_DAY: <CalendarClock className="h-4 w-4 text-orange-500" />,
-  MIN_TASKS: <Info className="h-4 w-4 text-orange-500" />,
-  MIN_TIME_BETWEEN_ORGANIZATIONS: <Hourglass className="h-4 w-4 text-orange-500" />,
+  MIN_TASKS: null, // <Info className="h-4 w-4 text-orange-500" />
+  MIN_TIME_BETWEEN_ORGANIZATIONS: null, // <Hourglass className="h-4 w-4 text-orange-500" />
   RECENTLY_ORGANIZED: <Hourglass className="h-4 w-4 text-orange-500" />,
-  TEST_TEXT: <Info className="h-4 w-4 text-orange-500" />,
+  TEST_TEXT: null, // <Info className="h-4 w-4 text-orange-500" />
 }
 
 function MainCard() {
@@ -43,7 +43,7 @@ function MainCard() {
     tasks,
     canDragItem,
     handleOnDropItem,
-    handleCompleteItem,
+    handleCompleteTask,
     handleDragItemLeave,
     handleItemTextChange,
     handleOnDragItemOver,
@@ -147,7 +147,7 @@ function MainCard() {
                     className="mt-[5.4px] border-zinc-600 transition-all disabled:border-zinc-400 dark:border-zinc-300 dark:disabled:border-zinc-600"
                     checked={completed}
                     disabled={!description.length}
-                    onCheckedChange={() => (isClearingItem ? null : handleCompleteItem(index))}
+                    onCheckedChange={() => (isClearingItem ? null : handleCompleteTask(id))}
                   />
                 </div>
 

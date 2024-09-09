@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 const TaskOutputSchema = z.object({
   tasks: z.array(z.object({
-    id: z.number(),
+    id: z.string(),
     description: z.string(),
     deadline: z.string().optional(),
     resources: z.string().optional(),
