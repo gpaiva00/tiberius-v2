@@ -17,7 +17,7 @@ function Footer() {
           {/* <p className="text-xs text-zinc-400 md:text-sm">{new Date().getFullYear()}</p> */}
           <span className="hidden font-extrabold text-zinc-500 md:block">{'·'}</span>
           <p className="hidden text-xs font-normal text-zinc-500 dark:text-zinc-500 md:block md:text-sm">
-            Concentre-se no presente
+            Tarefas sem ansiedade
           </p>
         </Link>
       </div>

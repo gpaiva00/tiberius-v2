@@ -1,4 +1,5 @@
 export * from './AIOnboardingModal'
+export * from './AIOnboardingModalWrapper'
 export * from './AIOnboardingStep1'
 export * from './DropdownMenu'
 export * from './MainCard'

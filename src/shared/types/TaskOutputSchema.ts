@@ -9,10 +9,10 @@ const TaskOutputSchema = z.object({
     completed: z.boolean().optional(),
     placeholder: z.string().optional(),
     quadrant: z.enum([
-      "urgente e importante",
-      "importante mas não urgente",
-      "urgente mas não importante",
-      "não urgente e não importante"
+      "Urgente e Importante",
+      "Importante mas Não Urgente",
+      "Urgente mas Não Importante",
+      "Não Urgente e Não Importante"
     ]),
     priority: z.enum(["alta", "média", "baixa"]),
     recommendation: z.object({

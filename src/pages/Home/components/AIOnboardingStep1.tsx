@@ -8,12 +8,10 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 
-import { AI_ONBOARDING_STATES } from '@/shared/constants'
-
-type AIOnboardingState = (typeof AI_ONBOARDING_STATES)[keyof typeof AI_ONBOARDING_STATES]
+// type AIOnboardingState = (typeof AI_ONBOARDING_STATES)[keyof typeof AI_ONBOARDING_STATES]
 
 interface AIOnboardingStep1Props {
-  handleNextStep: (step: AIOnboardingState) => void
+  handleNextStep: (open: boolean) => void
 }
 
 function AIOnboardingStep1({ handleNextStep }: AIOnboardingStep1Props) {
@@ -24,6 +22,7 @@ function AIOnboardingStep1({ handleNextStep }: AIOnboardingStep1Props) {
           src="/src/assets/ai-onboarding.png"
           alt="Onboarding AI"
           className="h-auto w-full"
+          loading="lazy"
         />
         <DialogTitle className="flex flex-row items-center gap-2 text-xl">
           Se organize com o Tiberius AI <Badge className="h-fit w-fit">Beta</Badge>
@@ -34,7 +33,7 @@ function AIOnboardingStep1({ handleNextStep }: AIOnboardingStep1Props) {
         artificial do Tiberius vai te ajudar a organizar suas tarefas.
       </DialogDescription>
       <DialogFooter className="mt-4">
-        <Button onClick={() => handleNextStep(AI_ONBOARDING_STATES.STEP_1)}>Vamos lá</Button>
+        <Button onClick={() => handleNextStep(false)}>Vamos lá</Button>
       </DialogFooter>
     </DialogContent>
   )
