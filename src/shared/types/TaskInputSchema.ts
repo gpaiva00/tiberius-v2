@@ -8,10 +8,10 @@ const TaskSchema = z.object({
   completed: z.boolean(),
   placeholder: z.string().optional(),
   quadrant: z.enum([
-    "urgente e importante",
-    "importante mas não urgente",
-    "urgente mas não importante",
-    "não urgente e não importante"
+    "Urgente e Importante",
+    "Importante mas Não Urgente",
+    "Urgente mas Não Importante",
+    "Não Urgente e Não Importante"
   ]).optional(),
   priority: z.enum(["alta", "média", "baixa"]).optional(),
   recommendation: z.object({

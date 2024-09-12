@@ -1,4 +1,3 @@
-import debounce from 'debounce'
 import { useAtom, useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
 
@@ -9,11 +8,11 @@ import { emojis, LIMIT_CARACTERS, placeholders, quotes, titles } from '@/shared/
 import { configsAtom, tasksAtom } from '@/shared/stores'
 import { Task, TaskInputSchema } from '@/shared/types'
 import {
-    cleanTaskForAI,
-    getRandomString,
-    nanoid,
-    reorderTasksByEmptyDescription,
-    sortTasksByRecommendationOrder,
+  cleanTaskForAI,
+  getRandomString,
+  nanoid,
+  reorderTasksByEmptyDescription,
+  sortTasksByRecommendationOrder,
 } from '@/shared/utils'
 
 function useTask() {
@@ -34,35 +33,28 @@ function useTask() {
     setTaskInput({ tasks: newTasks })
   }
 
-  function handleCompleteTask(id: Task['id']) {
-    const newTasks = [...taskInput.tasks]
-    const task = newTasks.find((task) => task.id === id)
-    if (!task) return
-
-    task.completed = true
-    setTaskInput({ tasks: newTasks })
-
-    toast({
-      title: `${getRandomString(titles)} ${getRandomString(emojis)}`,
-      description: `${getRandomString(quotes)}`,
+  const completeTask = (id: Task['id']) => {
+    setTaskInput((prevInput) => {
+      const updatedTasks = prevInput.tasks.map((task) => (task.id === id ? { ...task, completed: true } : task))
+      return { ...prevInput, tasks: updatedTasks }
     })
-
-    clearTask(task)
   }
 
-  function clearTask(task: Task) {
-    if (isClearingItem) return
+  const showCompletionToast = () => {
+    toast({
+      title: `${getRandomString(titles)} ${getRandomString(emojis)}`,
+      description: getRandomString(quotes),
+    })
+  }
 
-    setIsClearingItem(true)
-
-    let _task = {...task}
-    let newTasks = [...taskInput.tasks]
-
-    debounce(() => {
-      _task = {
-        ..._task,
+  const addNewTask = () => {
+    setTaskInput((prevInput) => {
+      const newTask: Task = {
         id: nanoid(),
         description: '',
+        placeholder: getRandomString(placeholders),
+        lastOrganizedAt: undefined,
+        resources: '',
         completed: false,
         recommendation: {
           order: undefined,
@@ -72,6 +64,65 @@ function useTask() {
         priority: undefined,
         quadrant: undefined,
       }
+
+      let updatedTasks = [...prevInput.tasks, newTask]
+
+      if (configs.autoReorder) {
+        updatedTasks = reorderTasksByEmptyDescription(updatedTasks)
+      }
+
+      return { ...prevInput, tasks: updatedTasks }
+    })
+  }
+
+  const moveToHistory = (task: Task) => {
+    // Implement logic to move the task to history
+    // for this moment, we'll just remove task from tasks array
+    setTaskInput((prevInput) => {
+      const updatedTasks = prevInput.tasks.filter((_task) => _task.id !== task.id)
+      return { ...prevInput, tasks: updatedTasks }
+    })
+  }
+
+  function handleCompleteTask(id: Task['id']) {
+    const task = taskInput.tasks.find((task) => task.id === id)
+    if (!task) return
+
+    completeTask(id)
+    showCompletionToast()
+
+    setTimeout(() => {
+      moveToHistory(task)
+      addNewTask()
+    }, 500)
+  }
+
+  function clearTask({ task, newTasks }: { task: Task; newTasks: Task[] }) {
+    if (isClearingItem) return
+
+    setIsClearingItem(true)
+
+    // remove completed task from tasks array
+    newTasks = newTasks.filter((_task) => _task.id !== task.id)
+
+    setTimeout(() => {
+      const _task: Task = {
+        id: nanoid(),
+        description: '',
+        placeholder: getRandomString(placeholders),
+        lastOrganizedAt: undefined,
+        resources: '',
+        completed: false,
+        recommendation: {
+          order: undefined,
+          description: getRandomString(placeholders),
+        },
+        deadline: '',
+        priority: undefined,
+        quadrant: undefined,
+      }
+
+      newTasks = [...taskInput.tasks, _task]
 
       if (configs.autoReorder) {
         newTasks = reorderTasksByEmptyDescription(newTasks)

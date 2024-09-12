@@ -114,7 +114,7 @@ function MainCard() {
                   {priority === 'alta' && <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />}
                   <Badge
                     variant="secondary"
-                    className="text-xs"
+                    className="text-xs font-medium"
                   >
                     {quadrant}
                   </Badge>
