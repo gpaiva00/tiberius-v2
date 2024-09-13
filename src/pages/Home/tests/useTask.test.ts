@@ -28,18 +28,20 @@ describe('useTask', () => {
       result.current.handleItemTextChange({ event, index: 0 })
     })
 
-    expect(result.current.tasks[0].text).toBe('New task text')
+    expect(result.current.tasks[0].description).toBe('New task text')
   })
 
   it(`should handle item text change with more than ${LIMIT_CARACTERS} caracters`, () => {
     const { result } = renderHook(useTask)
-    const event = { target: { value: 'New task text'.repeat(LIMIT_CARACTERS + 10) } } as unknown as React.ChangeEvent<HTMLTextAreaElement>
+    const event = {
+      target: { value: 'New task text'.repeat(LIMIT_CARACTERS + 10) },
+    } as unknown as React.ChangeEvent<HTMLTextAreaElement>
 
     act(() => {
       result.current.handleItemTextChange({ event, index: 0 })
     })
 
-    expect(result.current.tasks[0].text.length).toBe(LIMIT_CARACTERS)
+    expect(result.current.tasks[0].description.length).toBe(LIMIT_CARACTERS)
   })
 
   it('should handle complete item', () => {
@@ -51,15 +53,14 @@ describe('useTask', () => {
     })
 
     act(() => {
-      result.current.handleCompleteItem(0)
+      result.current.handleCompleteTask(result.current.tasks[0].id)
     })
 
     expect(result.current.tasks[0].completed).toBe(true)
     waitFor(
       () => {
-        expect(result.current.tasks[0].text).toBe('')
+        expect(result.current.tasks[0].description).toBe('')
         expect(result.current.tasks[0].placeholder).toBeTruthy()
-        expect(result.current.isClearingItem).toBe(false)
       },
       {
         timeout: 1000,
@@ -67,17 +68,17 @@ describe('useTask', () => {
     )
   })
 
-  it('should reorder items', () => {
+  it('should reorder tasks by empty description', () => {
     const { result } = renderHook(useTask)
-    const items = [
-      { id: 0, text: '', completed: false, placeholder: '' },
-      { id: 1, text: 'Task 1', completed: false, placeholder: '' },
+    const tasks = [
+      { id: '0', description: '', completed: false, placeholder: '' },
+      { id: '1', description: 'Task 1', completed: false, placeholder: '' },
     ]
 
-    const reorderedItems = result.current.reorderItems(items)
+    const reorderedTasks = result.current.reorderTasksByEmptyDescription(tasks)
 
-    expect(reorderedItems[0].text).toBe('Task 1')
-    expect(reorderedItems[1].text).toBe('')
+    expect(reorderedTasks[0].description).toBe('Task 1')
+    expect(reorderedTasks[1].description).toBe('')
   })
 
   it('should handle on drag item start', () => {
@@ -164,8 +165,8 @@ describe('useTask', () => {
 
     expect(event.preventDefault).toBeCalled()
     expect(event.currentTarget.classList.remove).toBeCalledWith('drag-over')
-    expect(result.current.tasks[0].text).toBe('Task 2')
-    expect(result.current.tasks[1].text).toBe('Task 1')
+    expect(result.current.tasks[0].description).toBe('Task 2')
+    expect(result.current.tasks[1].description).toBe('Task 1')
   })
 
   it('should toggle can drag item', () => {
@@ -182,5 +183,15 @@ describe('useTask', () => {
     })
 
     expect(result.current.canDragItem).toBe(false)
+  })
+
+  it('should handle organize tasks with AI', async () => {
+    const { result } = renderHook(useTask)
+
+    await act(async () => {
+      await result.current.handleOrganizeTasksWithAI()
+    })
+
+    // Add appropriate expectations based on the behavior of handleOrganizeTasksWithAI
   })
 })
