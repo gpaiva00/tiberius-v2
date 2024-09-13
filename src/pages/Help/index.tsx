@@ -45,9 +45,9 @@ function Help() {
             Você pode mover suas tarefas entre as 5 posições disponíveis para melhor se adequar às suas prioridades.
           </li>
           <li>
-            <b>Tiberius AI: </b>O Tiberius possui uma IA integrada que pode ajudar a organizar suas tarefas. A IA é
-            baseada em linguagem natural e é capaz de entender quase qualquer cotexto sobre tarefas e priorização. Para
-            utilizar a IA, basta clicar no botão "Organizar" no canto superior direito da lista de tarefas e ver a
+            <b>Tiberius AI (beta): </b>O Tiberius possui uma IA integrada que pode ajudar a organizar suas tarefas. A IA
+            é baseada em linguagem natural e é capaz de entender quase qualquer cotexto sobre tarefas e priorização.
+            Para utilizar a IA, basta clicar no botão "Organizar" no canto superior direito da lista de tarefas e ver a
             mágica acontecer.
           </li>
         </ul>
