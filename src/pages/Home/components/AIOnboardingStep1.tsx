@@ -14,6 +14,8 @@ interface AIOnboardingStep1Props {
   handleNextStep: (open: boolean) => void
 }
 
+const DISMISS_AI_ONBOARDING = true
+
 function AIOnboardingStep1({ handleNextStep }: AIOnboardingStep1Props) {
   return (
     <DialogContent>
@@ -33,7 +35,7 @@ function AIOnboardingStep1({ handleNextStep }: AIOnboardingStep1Props) {
         artificial do Tiberius vai te ajudar a organizar suas tarefas.
       </DialogDescription>
       <DialogFooter className="mt-4">
-        <Button onClick={() => handleNextStep(false)}>Vamos lá</Button>
+        <Button onClick={() => handleNextStep(DISMISS_AI_ONBOARDING)}>Vamos lá</Button>
       </DialogFooter>
     </DialogContent>
   )

@@ -1,17 +1,23 @@
-import React, { useState } from 'react'
+import { useAtom } from 'jotai'
+import React from 'react'
 
+import { configsAtom } from '@/shared/stores'
 import { AIOnboardingModal } from './AIOnboardingModal'
 
 const AIOnboardingModalWrapper = React.memo(() => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [configs, setConfigs] = useAtom(configsAtom)
 
   function handleOpenChange(open: boolean) {
-    setIsOpen(open)
+    console.warn('handleOpenChange')
+    setConfigs((prev) => ({
+      ...prev,
+      dismissAIOnboarding: open,
+    }))
   }
 
   return (
     <AIOnboardingModal
-      isOpen={isOpen}
+      isOpen={!configs.dismissAIOnboarding}
       onOpenChange={handleOpenChange}
     />
   )
