@@ -86,7 +86,7 @@ function MainCard() {
                 })}
               >
                 <Sparkles className="h-4 w-4" />
-                {isOrganizing ? 'Organizando...' : 'Organizar'}
+                <span className="hidden sm:inline">{isOrganizing ? 'Organizando...' : 'Organizar'}</span>
                 {!canOrganizeWithAI.canOrganize &&
                   canOrganizeWithAI.reasonCode &&
                   canOrganizeIcons[canOrganizeWithAI.reasonCode]}

@@ -25,9 +25,10 @@ function DropdownMenu() {
       <DropdownMenuTrigger>
         <Button
           variant="secondary"
-          // size="default"
+          className="gap-2"
         >
-          <Menu className="mr-2 h-4 w-4" /> Menu
+          <Menu className="h-4 w-4" />
+          <span className="hidden sm:inline">Menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-72">
