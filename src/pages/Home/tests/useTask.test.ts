@@ -2,6 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { LIMIT_CARACTERS } from '@/shared/constants'
+import { Task } from '@/shared/types'
 import { useTask } from '../hooks/useTask'
 
 vi.mock('@/shared/components/ui/use-toast', () => ({
@@ -75,7 +76,7 @@ describe('useTask', () => {
       { id: '1', description: 'Task 1', completed: false, placeholder: '' },
     ]
 
-    const reorderedTasks = result.current.reorderTasksByEmptyDescription(tasks)
+    const reorderedTasks = result.current.reorderTasksByEmptyDescription(tasks as Task[])
 
     expect(reorderedTasks[0].description).toBe('Task 1')
     expect(reorderedTasks[1].description).toBe('')
