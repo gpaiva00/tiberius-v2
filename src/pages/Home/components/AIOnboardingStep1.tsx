@@ -8,6 +8,8 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 
+import OnboardingImage from '@/assets/ai-onboarding.png'
+
 // type AIOnboardingState = (typeof AI_ONBOARDING_STATES)[keyof typeof AI_ONBOARDING_STATES]
 
 interface AIOnboardingStep1Props {
@@ -21,7 +23,7 @@ function AIOnboardingStep1({ handleNextStep }: AIOnboardingStep1Props) {
     <DialogContent>
       <DialogHeader>
         <img
-          src="/src/assets/ai-onboarding.png"
+          src={OnboardingImage}
           alt="Onboarding AI"
           className="h-auto w-full"
           loading="lazy"
