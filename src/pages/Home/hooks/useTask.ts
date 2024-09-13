@@ -19,7 +19,6 @@ function useTask() {
   const [taskInput, setTaskInput] = useAtom(tasksAtom)
   const configs = useAtomValue(configsAtom)
 
-  const [isClearingItem, setIsClearingItem] = useState(false)
   const [canDragItem, setCanDragItem] = useState(false)
 
   const { toast } = useToast()
@@ -33,21 +32,21 @@ function useTask() {
     setTaskInput({ tasks: newTasks })
   }
 
-  const completeTask = (id: Task['id']) => {
+  function completeTask(id: Task['id']) {
     setTaskInput((prevInput) => {
       const updatedTasks = prevInput.tasks.map((task) => (task.id === id ? { ...task, completed: true } : task))
       return { ...prevInput, tasks: updatedTasks }
     })
   }
 
-  const showCompletionToast = () => {
+  function showCompletionToast() {
     toast({
       title: `${getRandomString(titles)} ${getRandomString(emojis)}`,
       description: getRandomString(quotes),
     })
   }
 
-  const addNewTask = () => {
+  function addNewTask() {
     setTaskInput((prevInput) => {
       const newTask: Task = {
         id: nanoid(),
@@ -75,7 +74,7 @@ function useTask() {
     })
   }
 
-  const moveToHistory = (task: Task) => {
+  function moveToHistory(task: Task) {
     // Implement logic to move the task to history
     // for this moment, we'll just remove task from tasks array
     setTaskInput((prevInput) => {
@@ -94,42 +93,6 @@ function useTask() {
     setTimeout(() => {
       moveToHistory(task)
       addNewTask()
-    }, 500)
-  }
-
-  function clearTask({ task, newTasks }: { task: Task; newTasks: Task[] }) {
-    if (isClearingItem) return
-
-    setIsClearingItem(true)
-
-    // remove completed task from tasks array
-    newTasks = newTasks.filter((_task) => _task.id !== task.id)
-
-    setTimeout(() => {
-      const _task: Task = {
-        id: nanoid(),
-        description: '',
-        placeholder: getRandomString(placeholders),
-        lastOrganizedAt: undefined,
-        resources: '',
-        completed: false,
-        recommendation: {
-          order: undefined,
-          description: getRandomString(placeholders),
-        },
-        deadline: '',
-        priority: undefined,
-        quadrant: undefined,
-      }
-
-      newTasks = [...taskInput.tasks, _task]
-
-      if (configs.autoReorder) {
-        newTasks = reorderTasksByEmptyDescription(newTasks)
-      }
-
-      setTaskInput({ tasks: newTasks })
-      setIsClearingItem(false)
     }, 500)
   }
 
@@ -195,7 +158,6 @@ function useTask() {
     reorderTasksByEmptyDescription,
     canDragItem,
     isOrganizing,
-    isClearingItem,
     toggleCanDragItem,
     handleOnDropItem,
     handleOrganizeTasksWithAI,

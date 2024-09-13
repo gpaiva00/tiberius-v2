@@ -37,6 +37,7 @@ function MainCard() {
     handleBlurListNameInput,
     handleListNameInputChange,
     handleListNameInputKeyDown,
+    parent,
   } = useMainCard()
 
   const {
@@ -49,7 +50,6 @@ function MainCard() {
     handleOnDragItemOver,
     handleOnDragItemStart,
     toggleCanDragItem,
-    isClearingItem,
     canOrganizeWithAI,
     isOrganizing,
     handleOrganizeTasksWithAI,
@@ -98,10 +98,13 @@ function MainCard() {
       </CardHeader>
 
       <Card className="w-full rounded-md border border-zinc-200 shadow-lg dark:border-zinc-800 dark:bg-zinc-950 md:w-[600px]">
-        <CardContent className="p-0">
+        <CardContent
+          className="p-0"
+          ref={parent}
+        >
           {tasks.map(({ id, description, completed, placeholder, quadrant, recommendation, priority }, index) => (
             <div
-              key={index}
+              key={id}
               className="flex flex-col border-b last:border-b-0 dark:border-b-zinc-800"
               draggable={!!description.length && canDragItem}
               onDragStart={(event) => handleOnDragItemStart(event, index)}
@@ -147,7 +150,7 @@ function MainCard() {
                     className="mt-[5.4px] border-zinc-600 transition-all disabled:border-zinc-400 dark:border-zinc-300 dark:disabled:border-zinc-600"
                     checked={completed}
                     disabled={!description.length}
-                    onCheckedChange={() => (isClearingItem ? null : handleCompleteTask(id))}
+                    onCheckedChange={() => handleCompleteTask(id)}
                   />
                 </div>
 
