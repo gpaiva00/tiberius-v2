@@ -1,4 +1,4 @@
-![hero](/public/demo.jpeg)
+![hero](/public/demo.jpg)
 
 <p align="center">
 	<h1 align="center"><b>Tiberius</b></h1>
