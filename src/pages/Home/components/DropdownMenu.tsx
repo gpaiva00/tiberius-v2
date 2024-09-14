@@ -24,10 +24,11 @@ function DropdownMenu() {
     <OriginalDropdownMenu>
       <DropdownMenuTrigger>
         <Button
-          variant="outline"
-          size="icon"
+          variant="secondary"
+          className="gap-2"
         >
           <Menu className="h-4 w-4" />
+          <span className="hidden sm:inline">Menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-72">
@@ -40,7 +41,7 @@ function DropdownMenu() {
               className="flex items-center gap-1 font-normal capitalize"
             >
               <ArrowUpDown className="mr-2 h-4 w-4" />
-              Auto reorganizar
+              Auto Reordenar
               <HoverCard>
                 <HoverCardTrigger>
                   <Info className="h-3 w-3" />

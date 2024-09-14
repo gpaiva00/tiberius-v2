@@ -1,9 +1,12 @@
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useAtom, useAtomValue } from 'jotai'
 import { useState } from 'react'
 
 import { configsAtom, defaultListName, listAtom } from '@/shared/stores'
 
 function useMainCard() {
+  const [parent] = useAutoAnimate()
+
   const [listName, setListName] = useAtom(listAtom)
   const configs = useAtomValue(configsAtom)
 
@@ -38,6 +41,7 @@ function useMainCard() {
   }
 
   return {
+    parent,
     textFormatting: [],
     showItemNumber,
     listName,

@@ -1,7 +1,13 @@
-import { MainCard } from '@/pages/Home/components'
+import { AIOnboardingModalWrapper, MainCard } from '@/pages/Home/components'
 
 function Home() {
-  return <MainCard />
+  return (
+    <>
+      <MainCard />
+
+      <AIOnboardingModalWrapper />
+    </>
+  )
 }
 
 export { Home }

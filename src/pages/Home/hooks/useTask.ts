@@ -1,82 +1,126 @@
 import { useAtom, useAtomValue } from 'jotai'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { useToast } from '@/shared/components/ui/use-toast'
-import { getRandomString } from '@/shared/utils/getRandomString'
 
+import { useTaskOrganizer } from '@/pages/Home/hooks'
 import { emojis, LIMIT_CARACTERS, placeholders, quotes, titles } from '@/shared/constants'
 import { configsAtom, tasksAtom } from '@/shared/stores'
-
-import { ListItem } from '@/shared/types'
+import { Task, TaskInputSchema } from '@/shared/types'
+import {
+  cleanTaskForAI,
+  getRandomString,
+  nanoid,
+  reorderTasksByEmptyDescription,
+  sortTasksByRecommendationOrder,
+} from '@/shared/utils'
 
 function useTask() {
-  const [tasks, setTasks] = useAtom(tasksAtom)
+  const [taskInput, setTaskInput] = useAtom(tasksAtom)
+  const configs = useAtomValue(configsAtom)
 
-  const [isClearingItem, setIsClearingItem] = useState(false)
   const [canDragItem, setCanDragItem] = useState(false)
 
   const { toast } = useToast()
-  const configs = useAtomValue(configsAtom)
+  const { organizeTasksWithAI: _organizeTasksWithAI, isOrganizing, canOrganizeWithAI } = useTaskOrganizer()
+
+  const sortedTasks = useMemo(() => sortTasksByRecommendationOrder(taskInput.tasks), [taskInput.tasks])
 
   function handleItemTextChange({ event, index }: { index: number; event: React.ChangeEvent<HTMLTextAreaElement> }) {
-    const newTasks = [...tasks]
-
-    newTasks[index].text = event.target.value.slice(0, LIMIT_CARACTERS)
-
-    setTasks(newTasks)
+    const newTasks = [...taskInput.tasks]
+    newTasks[index].description = event.target.value.slice(0, LIMIT_CARACTERS)
+    setTaskInput({ tasks: newTasks })
   }
 
-  function handleCompleteItem(index: number) {
-    const newTasks = [...tasks]
+  function completeTask(id: Task['id']) {
+    setTaskInput((prevInput) => {
+      const updatedTasks = prevInput.tasks.map((task) => (task.id === id ? { ...task, completed: true } : task))
+      return { ...prevInput, tasks: updatedTasks }
+    })
+  }
 
-    newTasks[index].completed = !newTasks[index].completed
-
-    setTasks(newTasks)
-
+  function showCompletionToast() {
     toast({
       title: `${getRandomString(titles)} ${getRandomString(emojis)}`,
-      description: `${getRandomString(quotes)}`,
+      description: getRandomString(quotes),
     })
-
-    clearItem(index)
   }
 
-  function reorderItems(items: ListItem[]) {
-    const newTasks = [...items]
-
-    newTasks.sort((a, b) => {
-      if (!a.text && b.text) return 1
-      if (a.text && !b.text) return -1
-
-      return 0
-    })
-
-    return newTasks
-  }
-
-  function clearItem(index: number) {
-    if (isClearingItem) return
-
-    setIsClearingItem(true)
-
-    setTimeout(() => {
-      let newTasks = [...tasks]
-
-      newTasks[index] = {
-        ...newTasks[index],
-        text: '',
-        completed: false,
+  function addNewTask() {
+    setTaskInput((prevInput) => {
+      const newTask: Task = {
+        id: nanoid(),
+        description: '',
         placeholder: getRandomString(placeholders),
+        lastOrganizedAt: undefined,
+        resources: '',
+        completed: false,
+        recommendation: {
+          order: undefined,
+          description: getRandomString(placeholders),
+        },
+        deadline: '',
+        priority: undefined,
+        quadrant: undefined,
       }
+
+      let updatedTasks = [...prevInput.tasks, newTask]
 
       if (configs.autoReorder) {
-        newTasks = reorderItems(newTasks)
+        updatedTasks = reorderTasksByEmptyDescription(updatedTasks)
       }
 
-      setTasks(newTasks)
+      return { ...prevInput, tasks: updatedTasks }
+    })
+  }
 
-      setIsClearingItem(false)
-    }, 1000)
+  function moveToHistory(task: Task) {
+    // Implement logic to move the task to history
+    // for this moment, we'll just remove task from tasks array
+    setTaskInput((prevInput) => {
+      const updatedTasks = prevInput.tasks.filter((_task) => _task.id !== task.id)
+      return { ...prevInput, tasks: updatedTasks }
+    })
+  }
+
+  function handleCompleteTask(id: Task['id']) {
+    const task = taskInput.tasks.find((task) => task.id === id)
+    if (!task) return
+
+    completeTask(id)
+    showCompletionToast()
+
+    setTimeout(() => {
+      moveToHistory(task)
+      addNewTask()
+    }, 500)
+  }
+
+  async function handleOrganizeTasksWithAI() {
+    if (!canOrganizeWithAI.canOrganize) {
+      toast({
+        title: 'Não é possível organizar com IA agora',
+        description: canOrganizeWithAI.reason,
+      })
+
+      return
+    }
+
+    try {
+      const newTasks = [...taskInput.tasks]
+      const tasksToOrganize = newTasks.filter((task) => task.description.trim() !== '').map(cleanTaskForAI)
+
+      const validatedTasks = TaskInputSchema.parse({ tasks: tasksToOrganize })
+
+      await _organizeTasksWithAI(validatedTasks)
+    } catch (error) {
+      console.error('Erro ao validar ou organizar tarefas:', error)
+      toast({
+        title: 'Erro',
+        description: 'Ocorreu um erro ao organizar as tarefas. Por favor, tente novamente.',
+        variant: 'destructive',
+      })
+    }
   }
 
   function handleOnDragItemStart(event: React.DragEvent<HTMLDivElement>, index: number) {
@@ -96,12 +140,12 @@ function useTask() {
     event.preventDefault()
     event.currentTarget.classList.remove('drag-over')
     const dragIndex = Number(event.dataTransfer.getData('text/plain'))
-    const newTasks = [...tasks]
+    const newTasks = [...taskInput.tasks]
     const [draggedItem] = newTasks.splice(dragIndex, 1)
 
     newTasks.splice(index, 0, draggedItem)
 
-    setTasks(newTasks)
+    setTaskInput({ tasks: newTasks })
   }
 
   function toggleCanDragItem() {
@@ -109,13 +153,15 @@ function useTask() {
   }
 
   return {
-    tasks,
-    reorderItems,
+    tasks: sortedTasks,
+    canOrganizeWithAI,
+    reorderTasksByEmptyDescription,
     canDragItem,
-    isClearingItem,
+    isOrganizing,
     toggleCanDragItem,
     handleOnDropItem,
-    handleCompleteItem,
+    handleOrganizeTasksWithAI,
+    handleCompleteTask,
     handleDragItemLeave,
     handleOnDragItemOver,
     handleOnDragItemStart,

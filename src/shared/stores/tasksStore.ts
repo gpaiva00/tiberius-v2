@@ -1,17 +1,22 @@
 import { atomWithStorage } from 'jotai/utils'
 
-import { placeholders, TASKS_STORAGE_KEY } from '@/shared/constants'
-import { getRandomString } from '@/shared/utils/getRandomString'
+import { LIMIT_TASKS, placeholders, TASKS_STORAGE_KEY } from '@/shared/constants'
+import { TaskInput } from '@/shared/types'
+import { getRandomString, nanoid } from '@/shared/utils'
 
-import { ListItem } from '@/shared/types'
+const initialTasks: TaskInput = {
+  tasks: Array.from({ length: LIMIT_TASKS }, () => ({
+    id: nanoid(),
+    description: '',
+    completed: false,
+    placeholder: getRandomString(placeholders),
+    recommendation: {
+      order: 0,
+      description: '',
+    },
+  })),
+}
 
-const emptyItems = Array.from({ length: 5 }, (_, index) => ({
-  id: index,
-  text: '',
-  completed: false,
-  placeholder: getRandomString(placeholders),
-}))
-
-const tasksAtom = atomWithStorage<ListItem[]>(TASKS_STORAGE_KEY, emptyItems)
+const tasksAtom = atomWithStorage<TaskInput>(TASKS_STORAGE_KEY, initialTasks)
 
 export { tasksAtom }

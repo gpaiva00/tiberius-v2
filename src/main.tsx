@@ -7,7 +7,7 @@ import { Toaster } from '@/shared/components/ui/toaster'
 import { TooltipProvider } from '@/shared/components/ui/tooltip'
 import { Routes } from '@/shared/routes'
 
-import './index.css'
+import './main.css'
 
 const tiberiusStore = createStore()
 
